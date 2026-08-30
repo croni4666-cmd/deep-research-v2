@@ -1,0 +1,14 @@
+[project]
+name = "evidence-deep-research-skill"
+version = "2.2.0"
+description = "Codex skill for traceable, evidence-backed deep research"
+requires-python = ">=3.12"
+license = { file = "LICENSE" }
+authors = [{ name = "croni4666-cmd" }]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

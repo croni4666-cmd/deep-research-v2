@@ -1,21 +1,19 @@
 # Step 5: Write the research answer
 
-Lead with the conclusion the evidence supports. Then present the reasoning and
-evidence needed for the reader to evaluate it.
+Lead with the conclusion the evidence supports. Include only the reasoning and
+evidence needed for the reader to evaluate and use it.
 
-- Distinguish verified fact, inference, estimate, scenario, and recommendation.
-- Cite sources near the claims they support; do not cite a page that merely
-  mentions the topic.
-- State material conflicts, missing evidence, and transfer limitations.
-- Use exact dates when relative wording such as “current” or “recent” could be
-  ambiguous.
-- Match the user's requested length, language, structure, and technical level.
-- Avoid fabricated precision, simulated scores, and claims that an audit passed
-  when required evidence was absent.
+- Distinguish verified fact, inference, estimate, scenario, recommendation,
+  and unresolved question.
+- Cite the source that supports the specific claim; do not cite a page that
+  merely mentions the topic.
+- State material conflicts, missing evidence, methodological limitations, and
+  geographic or population transfer limits.
+- Use exact dates when words such as "current" or "recent" could be ambiguous.
+- Match the user's requested language, length, structure, and technical level.
+- Do not claim that deterministic validation proves factual correctness or
+  citation entailment.
 
-Deliver the answer in the conversation unless the user requested a reusable
-file. If a file is requested, write it inside the authorized workspace with a
-clear name and do not overwrite an existing artifact without permission.
-
-Before finishing, check that every key conclusion is supported, citations are
-reachable and relevant, and unresolved issues are visible to the reader.
+Before finishing, check that key conclusions have inspected support, citations
+are reachable and relevant, and unresolved issues are visible. Deliver in the
+conversation unless the user requested a reusable file.
