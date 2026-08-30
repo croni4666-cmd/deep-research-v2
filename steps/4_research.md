@@ -27,6 +27,13 @@ For each research question:
 5. Record supporting, contradictory, and contextual evidence separately.
 6. Mark the question verified, qualified, unresolved, or out of scope.
 
+For claims about a current or latest version, reopen the canonical release
+history immediately before writing. Verify the stable release identifier and
+publication timestamp at the research cutoff, and distinguish stable,
+prerelease, development, yanked, withdrawn, and unsupported releases. A page
+viewed earlier in the run or a search result is not sufficient final evidence
+for an exact latest-version claim.
+
 Do not infer citation support from proximity alone. The agent must inspect the
 relevant passage and judge whether it supports the claim as stated.
 

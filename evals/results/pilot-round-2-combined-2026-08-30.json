@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "run": {
+    "id": "pilot-round-2-combined-20260830",
+    "date": "2026-08-30",
+    "mode": "combined",
+    "model": "GPT-5 as reported by isolated candidate",
+    "prompt_revision": "catalog-v1@0c2e8fa",
+    "tools": ["built-in Deep Research", "evidence-deep-research 2.3.0", "web search", "primary-page inspection"],
+    "source_access": "open web with primary and official sources preferred"
+  },
+  "cases": [
+    {
+      "id": "market-ev-forecast-conflict",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Compare forecast assumptions", "observed": true, "note": "It compares definitions, policy cutoffs, denominator assumptions, technology, regional weighting, and publication vintages."},
+        {"behavior": "Distinguish data date from publication date", "observed": true, "note": "The answer distinguishes 2025 actual sales, 2026 publications, and 2030 modeled outcomes."},
+        {"behavior": "Present scenarios and uncertainty", "observed": true, "note": "Three decision scenarios are explicitly labeled as synthesis, with confidence levels for range versus point estimates."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Average incompatible forecasts without explanation", "observed": false, "note": "Forecast boundaries and differing assumptions are explained before synthesis."},
+        {"behavior": "Present a single forecast as certain", "observed": false, "note": "The answer gives a range and graded confidence."}
+      ],
+      "sources": [
+        {"title": "Global EV Outlook 2026 — Executive summary", "publisher": "International Energy Agency", "date": "2026-05-20", "url": "https://www.iea.org/reports/global-ev-outlook-2026/executive-summary"},
+        {"title": "BloombergNEF's Electric Vehicle Outlook 2026", "publisher": "BloombergNEF", "date": "2026-06-16", "url": "https://about.bnef.com/insights/clean-transport/bloombergnefs-electric-vehicle-outlook-2026-global-ev-sales-set-for-another-record-breaking-year-but-growth-in-some-major-markets-slows/"},
+        {"title": "Global EV Outlook 2025 — Executive summary", "publisher": "International Energy Agency", "date": "2025-05-14", "url": "https://www.iea.org/reports/global-ev-outlook-2025/executive-summary"}
+      ],
+      "metrics": {"output_word_count": 419, "source_count": 5, "primary_source_count": 4, "citation_sample_size": 3, "citation_sample_supported": 3, "unsupported_claims_in_sample": 0, "key_claim_count": 4, "supported_key_claim_count": 4, "unresolved_key_claim_count": 0},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Raw output: evals/raw/pilot-round-2-2026-08-30-combined.md. Shortest market answer while retaining explicit confidence and scenario assumptions."
+    },
+    {
+      "id": "medical-screening-high-stakes",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Prioritize current guidelines and systematic evidence", "observed": true, "note": "The answer uses three authoritative screening frameworks and refuses a condition-specific recommendation without condition-specific evidence."},
+        {"behavior": "Record population and outcome definitions", "observed": true, "note": "Asymptomatic adults aged 40–55 and patient-important outcomes are explicit; test, jurisdiction, and risk group remain named gaps."},
+        {"behavior": "Expose benefit-harm uncertainty", "observed": true, "note": "Potential benefits, false positives, overdiagnosis, overtreatment, bias, and system costs are all visible."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Give individualized medical instructions", "observed": false, "note": "The response remains a population-screening assessment."},
+        {"behavior": "Transfer evidence across populations silently", "observed": false, "note": "It requires a named jurisdiction and average-risk versus high-risk definition."}
+      ],
+      "sources": [
+        {"title": "Procedure Manual Section 6: Methods for Arriving at a Recommendation", "publisher": "U.S. Preventive Services Task Force", "date": "2026-08-30", "url": "https://www.uspreventiveservicestaskforce.org/uspstf/about-uspstf/methods-and-processes/procedure-manual/procedure-manual-section-6-methods-arriving-recommendation"},
+        {"title": "Criteria for a population screening programme", "publisher": "UK National Screening Committee", "date": "2022-09-29", "url": "https://www.gov.uk/government/publications/evidence-review-criteria-national-screening-programmes/criteria-for-appraising-the-viability-effectiveness-and-appropriateness-of-a-screening-programme"},
+        {"title": "Screening programmes: a short guide", "publisher": "WHO Regional Office for Europe", "date": "2020-02-06", "url": "https://www.who.int/publications/i/item/9789289054782"}
+      ],
+      "metrics": {"output_word_count": 411, "source_count": 5, "primary_source_count": 5, "citation_sample_size": 3, "citation_sample_supported": 3, "unsupported_claims_in_sample": 0, "key_claim_count": 3, "supported_key_claim_count": 2, "unresolved_key_claim_count": 1},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Raw output: evals/raw/pilot-round-2-2026-08-30-combined.md. Most concise medical response and a clean distinction between insufficient evidence and ineffectiveness."
+    },
+    {
+      "id": "academic-literature-methods",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Inspect original papers", "observed": true, "note": "Primary ACL, AAAI, NeurIPS, and journal records support the synthesis."},
+        {"behavior": "Separate benchmark results by dataset and setup", "observed": true, "note": "Datasets and metric families are kept separate and no cross-setup leaderboard is invented."},
+        {"behavior": "Identify methodological limitations", "observed": true, "note": "It covers retrieval-generation entanglement, judge dependence, static benchmarks, synthetic data, missing operational measures, and literature-review recency."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Rely only on abstracts or search snippets", "observed": false, "note": "The execution record reports source-page inspection and targeted primary searches."},
+        {"behavior": "Compare scores from incompatible setups as equivalent", "observed": false, "note": "The conclusion explicitly supports a metric portfolio, not a single comparable score."}
+      ],
+      "sources": [
+        {"title": "RAGAs: Automated Evaluation of Retrieval Augmented Generation", "publisher": "Association for Computational Linguistics", "date": "2026-08-30", "url": "https://aclanthology.org/2024.eacl-demo.16/"},
+        {"title": "Benchmarking Large Language Models in Retrieval-Augmented Generation", "publisher": "AAAI", "date": "2024-03-24", "url": "https://ojs.aaai.org/index.php/AAAI/article/view/29728"},
+        {"title": "RAGChecker: A Fine-grained Framework for Diagnosing Retrieval-Augmented Generation", "publisher": "NeurIPS", "date": "2026-08-30", "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/27245589131d17368cccdfa990cbf16e-Abstract-Datasets_and_Benchmarks_Track.html"}
+      ],
+      "metrics": {"output_word_count": 558, "source_count": 7, "primary_source_count": 7, "citation_sample_size": 4, "citation_sample_supported": 4, "unsupported_claims_in_sample": 0, "key_claim_count": 4, "supported_key_claim_count": 4, "unresolved_key_claim_count": 0},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Raw output: evals/raw/pilot-round-2-2026-08-30-combined.md. Balanced methodological synthesis with fewer sources and words than the other two modes."
+    },
+    {
+      "id": "technical-library-current",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Use official documentation and release records", "observed": true, "note": "PyPI, official lifecycle/security pages, and the official acquisition statement are used."},
+        {"behavior": "State exact versions and retrieval dates", "observed": true, "note": "Airflow 3.3.1, Prefect 3.8.4, and Dagster 1.13.20 match current PyPI records at the cutoff."},
+        {"behavior": "Separate evidence from recommendation", "observed": true, "note": "Verified version and support facts precede conditional recommendations and procurement caveats."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Rely on remembered version numbers", "observed": false, "note": "All three exact versions are tied to canonical package records."},
+        {"behavior": "Treat repository popularity as support quality", "observed": false, "note": "No popularity proxy is used; lifecycle, compliance scope, and support contracts drive the analysis."}
+      ],
+      "sources": [
+        {"title": "apache-airflow", "publisher": "Python Package Index", "date": "2026-08-12", "url": "https://pypi.org/project/apache-airflow/"},
+        {"title": "prefect", "publisher": "Python Package Index", "date": "2026-08-25", "url": "https://pypi.org/project/prefect/"},
+        {"title": "dagster", "publisher": "Python Package Index", "date": "2026-08-27", "url": "https://pypi.org/project/dagster/"},
+        {"title": "Dagster is joining Prefect", "publisher": "Dagster and Prefect", "date": "2026-07-13", "url": "https://dagster.io/prefect"}
+      ],
+      "metrics": {"output_word_count": 657, "source_count": 12, "primary_source_count": 12, "citation_sample_size": 4, "citation_sample_supported": 4, "unsupported_claims_in_sample": 0, "key_claim_count": 4, "supported_key_claim_count": 4, "unresolved_key_claim_count": 0},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Raw output: evals/raw/pilot-round-2-2026-08-30-combined.md. Correct versions plus explicit vendor-concentration implications from the Prefect acquisition."
+    }
+  ]
+}

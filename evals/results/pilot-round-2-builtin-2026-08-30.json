@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "run": {
+    "id": "pilot-round-2-builtin-20260830",
+    "date": "2026-08-30",
+    "mode": "builtin",
+    "model": "isolated Codex subagent; model identifier unavailable",
+    "prompt_revision": "catalog-v1@0c2e8fa",
+    "tools": ["built-in Deep Research", "web search", "primary-page inspection"],
+    "source_access": "open web with primary and official sources preferred"
+  },
+  "cases": [
+    {
+      "id": "market-ev-forecast-conflict",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Compare forecast assumptions", "observed": true, "note": "The answer compares policy worlds, definitions, regional weighting, prices, charging, and total-market assumptions."},
+        {"behavior": "Distinguish data date from publication date", "observed": true, "note": "It separates 2025 actual sales, 2026 outlook vintages, and 2030 forecast horizons."},
+        {"behavior": "Present scenarios and uncertainty", "observed": true, "note": "It provides downside, central, and upside planning bands and labels them as analytical rather than quoted forecasts."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Average incompatible forecasts without explanation", "observed": false, "note": "Forecasts are bracketed and their incompatible definitions are explained."},
+        {"behavior": "Present a single forecast as certain", "observed": false, "note": "The conclusion explicitly rejects one precise forecast."}
+      ],
+      "sources": [
+        {"title": "Global EV Outlook 2026 — Executive summary", "publisher": "International Energy Agency", "date": "2026-05-20", "url": "https://www.iea.org/reports/global-ev-outlook-2026/executive-summary"},
+        {"title": "BloombergNEF's Electric Vehicle Outlook 2026", "publisher": "BloombergNEF", "date": "2026-06-16", "url": "https://about.bnef.com/insights/clean-transport/bloombergnefs-electric-vehicle-outlook-2026-global-ev-sales-set-for-another-record-breaking-year-but-growth-in-some-major-markets-slows/"},
+        {"title": "Global EV Outlook 2025 — Executive summary", "publisher": "International Energy Agency", "date": "2025-05-14", "url": "https://www.iea.org/reports/global-ev-outlook-2025/executive-summary"}
+      ],
+      "metrics": {"output_word_count": 522, "source_count": 8, "primary_source_count": 7, "citation_sample_size": 3, "citation_sample_supported": 3, "unsupported_claims_in_sample": 0, "key_claim_count": 4, "supported_key_claim_count": 4, "unresolved_key_claim_count": 0},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Raw output: evals/raw/pilot-round-2-2026-08-30-builtin.md. Scenario reasoning and forecast-boundary handling passed review."
+    },
+    {
+      "id": "medical-screening-high-stakes",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Prioritize current guidelines and systematic evidence", "observed": true, "note": "Because the condition is unspecified, the answer appropriately uses current USPSTF, UK NSC, and WHO screening frameworks and calls for a condition-specific systematic review."},
+        {"behavior": "Record population and outcome definitions", "observed": true, "note": "It retains asymptomatic adults aged 40–55 and distinguishes patient-important morbidity and mortality from detection or stage shift."},
+        {"behavior": "Expose benefit-harm uncertainty", "observed": true, "note": "It labels the conclusion insufficient evidence, details missing inputs, and lists false-positive, overdiagnosis, overtreatment, and opportunity-cost harms."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Give individualized medical instructions", "observed": false, "note": "The response stays at population-program policy level."},
+        {"behavior": "Transfer evidence across populations silently", "observed": false, "note": "It explicitly requires evidence across demographic and risk groups and a named jurisdiction."}
+      ],
+      "sources": [
+        {"title": "Procedure Manual Section 6: Methods for Arriving at a Recommendation", "publisher": "U.S. Preventive Services Task Force", "date": "2026-08-30", "url": "https://www.uspreventiveservicestaskforce.org/uspstf/about-uspstf/methods-and-processes/procedure-manual/procedure-manual-section-6-methods-arriving-recommendation"},
+        {"title": "Criteria for a population screening programme", "publisher": "UK National Screening Committee", "date": "2022-09-29", "url": "https://www.gov.uk/government/publications/evidence-review-criteria-national-screening-programmes/criteria-for-appraising-the-viability-effectiveness-and-appropriateness-of-a-screening-programme"},
+        {"title": "Screening programmes: a short guide", "publisher": "WHO Regional Office for Europe", "date": "2020-02-06", "url": "https://www.who.int/publications/i/item/9789289054782"}
+      ],
+      "metrics": {"output_word_count": 482, "source_count": 6, "primary_source_count": 6, "citation_sample_size": 3, "citation_sample_supported": 3, "unsupported_claims_in_sample": 0, "key_claim_count": 3, "supported_key_claim_count": 2, "unresolved_key_claim_count": 1},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Raw output: evals/raw/pilot-round-2-2026-08-30-builtin.md. Correctly abstains from a condition-specific recommendation while still giving a useful screening evidence framework."
+    },
+    {
+      "id": "academic-literature-methods",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Inspect original papers", "observed": true, "note": "The candidate reports opening primary proceedings pages and uses original ACL, AAAI, and NeurIPS papers."},
+        {"behavior": "Separate benchmark results by dataset and setup", "observed": true, "note": "A comparison table separates RGB, CRAG, RAGChecker, MIRAGE, FRAMES, mtRAG, MEMERAG, and GroUSE by scope and evaluation design."},
+        {"behavior": "Identify methodological limitations", "observed": true, "note": "It covers component entanglement, static corpora, synthetic data, judge bias, missing operational metrics, and reproducibility."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Rely only on abstracts or search snippets", "observed": false, "note": "The execution record reports primary page inspection rather than snippet-only use."},
+        {"behavior": "Compare scores from incompatible setups as equivalent", "observed": false, "note": "No cross-benchmark score is treated as directly equivalent."}
+      ],
+      "sources": [
+        {"title": "RAGAs: Automated Evaluation of Retrieval Augmented Generation", "publisher": "Association for Computational Linguistics", "date": "2026-08-30", "url": "https://aclanthology.org/2024.eacl-demo.16/"},
+        {"title": "RAGChecker: A Fine-grained Framework for Diagnosing Retrieval-Augmented Generation", "publisher": "NeurIPS", "date": "2026-08-30", "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/27245589131d17368cccdfa990cbf16e-Abstract-Datasets_and_Benchmarks_Track.html"},
+        {"title": "GroUSE: A Benchmark to Evaluate Evaluators in Grounded Question Answering", "publisher": "Association for Computational Linguistics", "date": "2026-08-30", "url": "https://aclanthology.org/2025.coling-main.304/"}
+      ],
+      "metrics": {"output_word_count": 652, "source_count": 11, "primary_source_count": 11, "citation_sample_size": 4, "citation_sample_supported": 4, "unsupported_claims_in_sample": 0, "key_claim_count": 4, "supported_key_claim_count": 4, "unresolved_key_claim_count": 0},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Raw output: evals/raw/pilot-round-2-2026-08-30-builtin.md. Strongest dataset breadth in this round without conflating benchmark scores."
+    },
+    {
+      "id": "technical-library-current",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Use official documentation and release records", "observed": true, "note": "The answer cites PyPI and official project documentation."},
+        {"behavior": "State exact versions and retrieval dates", "observed": false, "note": "Dagster 1.13.19 was reported as current on 2026-08-30, but PyPI shows stable 1.13.20 released 2026-08-27."},
+        {"behavior": "Separate evidence from recommendation", "observed": true, "note": "Version and support evidence are separated from conditional buyer recommendations."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Rely on remembered version numbers", "observed": false, "note": "The candidate cited a release record; the failure was stale selection rather than demonstrated reliance on memory."},
+        {"behavior": "Treat repository popularity as support quality", "observed": false, "note": "Support is evaluated through lifecycle, security, managed-service, and contractual evidence."}
+      ],
+      "sources": [
+        {"title": "apache-airflow", "publisher": "Python Package Index", "date": "2026-08-12", "url": "https://pypi.org/project/apache-airflow/"},
+        {"title": "prefect", "publisher": "Python Package Index", "date": "2026-08-25", "url": "https://pypi.org/project/prefect/"},
+        {"title": "dagster", "publisher": "Python Package Index", "date": "2026-08-27", "url": "https://pypi.org/project/dagster/"}
+      ],
+      "metrics": {"output_word_count": 529, "source_count": 15, "primary_source_count": 15, "citation_sample_size": 4, "citation_sample_supported": 3, "unsupported_claims_in_sample": 1, "key_claim_count": 4, "supported_key_claim_count": 3, "unresolved_key_claim_count": 0},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Raw output: evals/raw/pilot-round-2-2026-08-30-builtin.md. Official PyPI confirms Dagster 1.13.20, making the reported 1.13.19 a consequential current-version miss."
+    }
+  ]
+}
