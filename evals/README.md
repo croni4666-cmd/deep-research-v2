@@ -37,6 +37,16 @@ For each case and mode, record:
 - token or monetary cost when the runtime exposes it;
 - reviewer notes and links to retained artifacts.
 
+Completed cases also use a `metrics` object. Counts are deliberately simple
+and reviewable: final-answer words, sources reported in the raw answer, primary
+sources, sampled citations and supported samples, unsupported claims found in
+that sample, and key claims classified as supported or unresolved. These metrics distinguish
+answers that satisfy the same safety rubric but differ materially in coverage,
+precision, and reading cost. They are not a single composite quality score.
+
+Raw candidate responses belong in `evals/raw/`. Freeze them before exposing
+the candidate runner to catalog expectations or evaluator-only ground truth.
+
 Do not combine runs from different models, source access, or prompt revisions
 without labeling the difference. Do not publish benchmark scores until the raw
 case-level results and evaluation method are reviewable.

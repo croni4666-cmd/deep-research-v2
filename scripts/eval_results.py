@@ -12,6 +12,17 @@ from urllib.parse import urlparse
 
 ALLOWED_MODES = {"builtin", "combined", "evidence"}
 ALLOWED_STATUSES = {"blocked", "completed", "not_evaluated"}
+METRIC_FIELDS = {
+    "output_word_count",
+    "source_count",
+    "primary_source_count",
+    "citation_sample_size",
+    "citation_sample_supported",
+    "unsupported_claims_in_sample",
+    "key_claim_count",
+    "supported_key_claim_count",
+    "unresolved_key_claim_count",
+}
 
 
 def _issue(issues: list[dict[str, str]], code: str, path: str, message: str) -> None:
@@ -79,6 +90,51 @@ def _validate_behavior_results(
     return scored, passed
 
 
+def _validate_metrics(
+    metrics: Any,
+    path: str,
+    completed: bool,
+    source_count: int | None,
+    issues: list[dict[str, str]],
+) -> dict[str, int]:
+    if not isinstance(metrics, dict):
+        if completed:
+            _issue(issues, "case.completed_metrics_missing", path,
+                   "Completed cases require comparable output and review metrics.")
+        return {}
+    values: dict[str, int] = {}
+    for field in sorted(METRIC_FIELDS):
+        value = metrics.get(field)
+        if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+            _issue(issues, "case.invalid_metric", f"{path}.{field}",
+                   f"{field} must be a non-negative integer.")
+            continue
+        values[field] = value
+    extra = sorted(set(metrics) - METRIC_FIELDS)
+    if extra:
+        _issue(issues, "case.unknown_metric", path, f"Unknown metrics: {extra}")
+    if completed and values.get("output_word_count", 0) == 0:
+        _issue(issues, "case.empty_output_metric", f"{path}.output_word_count",
+               "Completed cases must record a non-empty final answer.")
+    if source_count is not None and values.get("source_count", 0) < source_count:
+        _issue(issues, "case.source_count_mismatch", f"{path}.source_count",
+               "source_count cannot be smaller than the retained sources array length.")
+    if values.get("primary_source_count", 0) > values.get("source_count", 0):
+        _issue(issues, "case.primary_source_count_exceeds_sources", path,
+               "primary_source_count cannot exceed source_count.")
+    if values.get("citation_sample_supported", 0) > values.get("citation_sample_size", 0):
+        _issue(issues, "case.citation_sample_inconsistent", path,
+               "citation_sample_supported cannot exceed citation_sample_size.")
+    classified_claims = (
+        values.get("supported_key_claim_count", 0)
+        + values.get("unresolved_key_claim_count", 0)
+    )
+    if classified_claims > values.get("key_claim_count", 0):
+        _issue(issues, "case.key_claim_counts_inconsistent", path,
+               "Supported plus unresolved key claims cannot exceed key_claim_count.")
+    return values
+
+
 def validate_results(data: Any, catalog: Any, *, allow_partial: bool = False) -> dict[str, Any]:
     issues: list[dict[str, str]] = []
     catalog_cases = _load_catalog_cases(catalog)
@@ -115,6 +171,10 @@ def validate_results(data: Any, catalog: Any, *, allow_partial: bool = False) ->
     behavior_scored = 0
     expected_passed = 0
     forbidden_avoided = 0
+    output_words = 0
+    reported_sources = 0
+    citation_sample_size = 0
+    citation_sample_supported = 0
     for index, result in enumerate(cases):
         path = f"$.cases[{index}]"
         if not isinstance(result, dict) or result.get("id") not in catalog_cases:
@@ -157,6 +217,7 @@ def validate_results(data: Any, catalog: Any, *, allow_partial: bool = False) ->
         forbidden_avoided += scored - observed
 
         sources = result.get("sources")
+        case_source_count: int | None = len(sources) if isinstance(sources, list) else None
         if not isinstance(sources, list):
             _issue(issues, "case.sources_not_array", f"{path}.sources", "sources must be an array.")
         elif is_completed:
@@ -179,6 +240,14 @@ def validate_results(data: Any, catalog: Any, *, allow_partial: bool = False) ->
                 if not _http_url(source["url"]):
                     _issue(issues, "case.invalid_source_url", f"{source_path}.url",
                            "Source URLs must be absolute http or https URLs.")
+        metrics = _validate_metrics(
+            result.get("metrics"), f"{path}.metrics", is_completed,
+            case_source_count, issues,
+        )
+        output_words += metrics.get("output_word_count", 0)
+        reported_sources += metrics.get("source_count", 0)
+        citation_sample_size += metrics.get("citation_sample_size", 0)
+        citation_sample_supported += metrics.get("citation_sample_supported", 0)
         if not _text(result.get("notes")):
             _issue(issues, "case.missing_notes", f"{path}.notes", "Reviewer notes are required.")
 
@@ -192,6 +261,10 @@ def validate_results(data: Any, catalog: Any, *, allow_partial: bool = False) ->
         "behavior_scores_recorded": behavior_scored,
         "expected_behaviors_observed": expected_passed,
         "forbidden_behaviors_avoided": forbidden_avoided,
+        "output_words": output_words,
+        "reported_sources": reported_sources,
+        "citation_sample_size": citation_sample_size,
+        "citation_sample_supported": citation_sample_supported,
         "partial": set(catalog_cases) != seen,
     }
     return _finish(issues, summary)

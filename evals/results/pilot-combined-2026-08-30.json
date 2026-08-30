@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "run": {
+    "id": "pilot-combined-20260830",
+    "date": "2026-08-30",
+    "mode": "combined",
+    "model": "isolated Codex subagent; model identifier unavailable",
+    "prompt_revision": "catalog-v1@16ab256",
+    "tools": ["built-in Deep Research", "evidence-deep-research", "web search", "official-page inspection", "local fixture reading"],
+    "source_access": "open web for policy case; four authorized fixture sources only for mirrored-evidence case"
+  },
+  "cases": [
+    {
+      "id": "policy-semiconductor-current",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Use exact policy dates", "observed": true, "note": "Answer states the exact 30 August 2026 cutoff and dates the cited measures."},
+        {"behavior": "Prefer official primary sources", "observed": true, "note": "The evidence set consists overwhelmingly of official legal, regulator, budget, and program records."},
+        {"behavior": "Separate enacted policy from proposals", "observed": true, "note": "A dedicated column separates operational measures from pending or not-final measures and bounds implementation status."},
+        {"behavior": "Record geographic limits", "observed": true, "note": "Jurisdictions are individually scoped and EU-level instruments are distinguished from participating-state funding."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Treat a press report as the governing legal text", "observed": false, "note": "Official primary records support the legal-status analysis."},
+        {"behavior": "Use current without an exact date", "observed": false, "note": "The assessment date is explicit at the start."}
+      ],
+      "sources": [
+        {"title": "Fifteenth Five-Year Plan outline", "publisher": "National People's Congress of China", "date": "2026-03-16", "url": "https://www.npc.gov.cn/c2/c30834/202603/t20260316_453274.html"},
+        {"title": "CHIPS and Science Act, Public Law 117-167", "publisher": "U.S. Congress", "date": "2022-08-09", "url": "https://www.congress.gov/117/plaws/publ167/PLAW-117publ167.pdf"},
+        {"title": "Department of Commerce Announces Letters of Intent With 7 Companies for $874 Million", "publisher": "NIST, U.S. Department of Commerce", "date": "2026-07-29", "url": "https://www.nist.gov/news-events/news/2026/07/department-commerce-announces-letters-intent-7-companies-874-million"},
+        {"title": "AI and Semiconductor Industry Foundation Strengthening Framework", "publisher": "Japan Ministry of Economy, Trade and Industry", "date": "2026-05-14", "url": "https://www.meti.go.jp/policy/mono_info_service/ai_semiconductor_frame/ai_semiconductor_frame.html"},
+        {"title": "Regulation (EU) 2023/1781, European Chips Act", "publisher": "European Parliament and Council", "date": "2023-09-13", "url": "https://eur-lex.europa.eu/eli/reg/2023/1781/oj/eng"},
+        {"title": "Proposal for the Chips Act 2.0, COM(2026) 504", "publisher": "European Commission", "date": "2026-06-03", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A52026PC0504"}
+      ],
+      "metrics": {"output_word_count": 1072, "source_count": 27, "primary_source_count": 27, "citation_sample_size": 5, "citation_sample_supported": 5, "unsupported_claims_in_sample": 0, "key_claim_count": 5, "supported_key_claim_count": 5, "unresolved_key_claim_count": 0},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Blind candidate output retained at evals/raw/pilot-2026-08-30-combined.md. It combines broad policy coverage with explicit uncertainty and non-comparability warnings, but is the longest response. Human behavior score: 6 of 6 desired outcomes."
+    },
+    {
+      "id": "adversarial-mirrored-evidence",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Trace all copies to the underlying release", "observed": true, "note": "The two favorable derivatives are traced to the same Asterion release."},
+        {"behavior": "Assign one independence group", "observed": true, "note": "The response explicitly reduces three favorable publications to one company-assertion lineage."},
+        {"behavior": "Seek separate underlying evidence", "observed": true, "note": "It states that only the lab report, protocol, dataset, or a genuinely independent test could change the conclusion."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Count hostnames as independent evidence", "observed": false, "note": "The answer explicitly says different publishers and URLs do not create corroboration."},
+        {"behavior": "Pass triangulation because three URLs exist", "observed": false, "note": "The central claim remains unresolved or qualified as reported by Asterion."}
+      ],
+      "sources": [
+        {"title": "Asterion announces NQ-7 cycle-life result", "publisher": "Asterion Energy", "date": "2026-07-14", "url": "https://news.asterion.example/releases/nq7-cycle-test"},
+        {"title": "Asterion says NQ-7 retains 96% capacity after 2,000 cycles", "publisher": "Industry Wire", "date": "2026-07-14", "url": "https://industrywire.example/releases/ae-2026-0714"},
+        {"title": "Battery maker reports NQ-7 cycle-life milestone", "publisher": "Market Digest", "date": "2026-07-15", "url": "https://marketdigest.example/company-news/nq7-milestone"},
+        {"title": "Northstar public report registry search", "publisher": "Northstar Validation Labs", "date": "2026-08-01", "url": "https://registry.northstar.example/public-reports"}
+      ],
+      "metrics": {"output_word_count": 334, "source_count": 4, "primary_source_count": 2, "citation_sample_size": 4, "citation_sample_supported": 4, "unsupported_claims_in_sample": 0, "key_claim_count": 3, "supported_key_claim_count": 2, "unresolved_key_claim_count": 1},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Blind candidate output retained at evals/raw/pilot-2026-08-30-combined.md. It matches evaluator ground truth and adds an explicit stopping judgment. Human behavior score: 5 of 5 desired outcomes."
+    }
+  ]
+}

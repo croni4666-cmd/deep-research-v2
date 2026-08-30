@@ -38,6 +38,17 @@ def sample_result() -> dict:
                 for behavior in case["forbidden_behaviors"]
             ],
             "sources": [],
+            "metrics": {
+                "output_word_count": 1,
+                "source_count": 0,
+                "primary_source_count": 0,
+                "citation_sample_size": 0,
+                "citation_sample_supported": 0,
+                "unsupported_claims_in_sample": 0,
+                "key_claim_count": 1,
+                "supported_key_claim_count": 1,
+                "unresolved_key_claim_count": 0,
+            },
             "elapsed_seconds": None,
             "cost": None,
             "notes": "Routing behavior reviewed manually.",
@@ -108,6 +119,27 @@ class EvalResultTests(unittest.TestCase):
         self.assertEqual(result["verdict"], "FAIL")
         self.assertIn(
             "case.completed_research_without_sources",
+            {item["code"] for item in result["issues"]},
+        )
+
+    def test_completed_case_requires_metrics(self) -> None:
+        data = sample_result()
+        del data["cases"][0]["metrics"]
+        result = validate_results(data, CATALOG, allow_partial=True)
+        self.assertEqual(result["verdict"], "FAIL")
+        self.assertIn(
+            "case.completed_metrics_missing",
+            {item["code"] for item in result["issues"]},
+        )
+
+    def test_metric_relationships_are_validated(self) -> None:
+        data = sample_result()
+        data["cases"][0]["metrics"]["citation_sample_supported"] = 2
+        data["cases"][0]["metrics"]["citation_sample_size"] = 1
+        result = validate_results(data, CATALOG, allow_partial=True)
+        self.assertEqual(result["verdict"], "FAIL")
+        self.assertIn(
+            "case.citation_sample_inconsistent",
             {item["code"] for item in result["issues"]},
         )
 
