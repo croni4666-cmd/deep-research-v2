@@ -9,6 +9,9 @@
 - Added repository tests and CI validation for the evaluation catalog.
 - Documented a three-mode comparison protocol without fabricating benchmark
   scores or increasing runtime Skill context.
+- Added an offline mirrored-evidence fixture and a case-level result validator
+  with explicit isolation, reviewer-note, source-retention, and partial-run
+  requirements.
 
 ## 2.2.0 - 2026-08-30
 

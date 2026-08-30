@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "fixture": "mirrored-evidence",
+  "fictional": true,
+  "claim": "The NQ-7 retained 96% capacity after 2,000 cycles in an independently verified test.",
+  "independence_groups": [
+    {
+      "id": "asterion-release-ae-2026-0714",
+      "members": [
+        "sources/01-asterion-press-release.md",
+        "sources/02-industry-wire-copy.md",
+        "sources/03-market-digest-copy.md"
+      ]
+    },
+    {
+      "id": "northstar-public-registry",
+      "members": ["sources/04-lab-registry-search.md"]
+    }
+  ],
+  "supported_conclusion": "The three publication pages are one underlying company assertion, while the registry search is independent but does not verify the claimed result. Independent verification remains unresolved.",
+  "unsupported_conclusions": [
+    "Three independent sources verify the claim.",
+    "The registry proves that no test occurred.",
+    "The product claim is false."
+  ]
+}

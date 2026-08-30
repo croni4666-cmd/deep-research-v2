@@ -52,6 +52,13 @@ class EvalCatalogTests(unittest.TestCase):
         self.assertEqual(result["verdict"], "FAIL")
         self.assertIn("coverage.non_trigger", {item["code"] for item in result["issues"]})
 
+    def test_fixture_path_must_be_repository_relative(self) -> None:
+        catalog = load_catalog()
+        catalog["cases"][0]["fixture"] = "../outside"
+        result = validate_catalog(catalog)
+        self.assertEqual(result["verdict"], "FAIL")
+        self.assertIn("case.unsafe_fixture", {item["code"] for item in result["issues"]})
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -149,6 +149,17 @@ def validate_catalog(data: Any, *, strict: bool = False) -> dict[str, Any]:
         if isinstance(case.get("tags"), list):
             tags.update(tag for tag in case["tags"] if _text(tag))
 
+        fixture = case.get("fixture")
+        if fixture is not None:
+            if not _text(fixture):
+                _add(issues, "error", "case.invalid_fixture", f"{path}.fixture",
+                     "fixture must be a non-empty repository-relative path.")
+            else:
+                fixture_path = Path(fixture)
+                if fixture_path.is_absolute() or ".." in fixture_path.parts:
+                    _add(issues, "error", "case.unsafe_fixture", f"{path}.fixture",
+                         "fixture must stay within the repository.")
+
     missing_categories = sorted(REQUIRED_CATEGORIES - categories)
     if missing_categories:
         _add(issues, "error", "coverage.categories", "$.cases",
