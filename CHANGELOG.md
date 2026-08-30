@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.3.0 - Unreleased
+
+- Added a versioned catalog of realistic trigger, routing, high-risk, and
+  adversarial research requests.
+- Added deterministic catalog validation for category, risk, routing, and
+  adversarial-theme coverage.
+- Added repository tests and CI validation for the evaluation catalog.
+- Documented a three-mode comparison protocol without fabricating benchmark
+  scores or increasing runtime Skill context.
+
 ## 2.2.0 - 2026-08-30
 
 - Renamed the installed skill to `evidence-deep-research` to avoid collisions

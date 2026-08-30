@@ -23,5 +23,7 @@ jobs:
         run: python -m compileall -q scripts tests
       - name: Run unit and adversarial tests
         run: python -m unittest discover -s tests -v
+      - name: Validate forward-evaluation coverage
+        run: python scripts/eval_catalog.py evals/cases.json --strict
       - name: Smoke-test plan preview
         run: python scripts/plan_preview.py --topic "test topic" --json

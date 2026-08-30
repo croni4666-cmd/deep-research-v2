@@ -1,13 +1,14 @@
 # Codex security and reliability review
 
 **Reviewed:** 2026-08-30
-**Version:** 2.2.0
+**Version:** 2.3.0 (unreleased)
 
 ## Current scope
 
 The installable Skill contains its entrypoint, six workflow steps, one evidence
-ledger reference, and two standard-library Python helpers. Tests and project
-documentation are included in the repository but are not runtime authority.
+ledger reference, and two standard-library Python helpers. Tests, the forward
+evaluation catalog and validator, and project documentation are included in the
+repository but are not runtime authority.
 
 ## Security properties
 
