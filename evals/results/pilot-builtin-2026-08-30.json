@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "run": {
+    "id": "pilot-builtin-20260830",
+    "date": "2026-08-30",
+    "mode": "builtin",
+    "model": "isolated Codex subagent; model identifier unavailable",
+    "prompt_revision": "catalog-v1@16ab256",
+    "tools": ["built-in Deep Research", "web search", "official-page inspection", "local fixture reading"],
+    "source_access": "open web for policy case; four authorized fixture sources only for mirrored-evidence case"
+  },
+  "cases": [
+    {
+      "id": "policy-semiconductor-current",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Use exact policy dates", "observed": true, "note": "Answer states an exact 2026-08-30 cutoff and dates operative laws, notices, proposals, and suspensions."},
+        {"behavior": "Prefer official primary sources", "observed": true, "note": "The retained sources are government statutes, regulator notices, program pages, and legislative records."},
+        {"behavior": "Separate enacted policy from proposals", "observed": true, "note": "A dedicated table separates operational measures from pending bills, future implementation, and the EU proposal."},
+        {"behavior": "Record geographic limits", "observed": true, "note": "The answer scopes China nationally, the U.S. federally, Japan nationally, and EU action separately from Member State aid."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Treat a press report as the governing legal text", "observed": false, "note": "No press report is used as governing law; official legal and regulator records support status claims."},
+        {"behavior": "Use current without an exact date", "observed": false, "note": "The assessment cutoff is explicitly August 30, 2026."}
+      ],
+      "sources": [
+        {"title": "New-era policies for high-quality development of integrated circuits and software", "publisher": "State Council of China, republished by MIIT", "date": "2020-07-27", "url": "https://www.miit.gov.cn/xwdt/szyw/art/2020/art_b5059afaa450422a820648c635d653f6.html"},
+        {"title": "CHIPS for America", "publisher": "NIST, U.S. Department of Commerce", "date": "2026-08-30", "url": "https://www.nist.gov/chips"},
+        {"title": "Adjusting Imports of Semiconductors, Semiconductor Manufacturing Equipment, and Their Derivative Products into the United States", "publisher": "White House", "date": "2026-01-14", "url": "https://www.whitehouse.gov/presidential-actions/2026/01/adjusting-imports-of-semiconductors-semiconductor-manufacturing-equipment-and-their-derivative-products-into-the-united-states/"},
+        {"title": "AI and Semiconductor Industry Foundation Strengthening Framework", "publisher": "Japan Ministry of Economy, Trade and Industry", "date": "2026-05-14", "url": "https://www.meti.go.jp/policy/mono_info_service/ai_semiconductor_frame/ai_semiconductor_frame.html"},
+        {"title": "European Chips Act", "publisher": "European Commission", "date": "2026-07-14", "url": "https://digital-strategy.ec.europa.eu/en/policies/european-chips-act"},
+        {"title": "Proposal for Chips Act 2.0", "publisher": "European Commission", "date": "2026-06-03", "url": "https://digital-strategy.ec.europa.eu/en/library/proposal-chips-act-20"}
+      ],
+      "metrics": {"output_word_count": 1458, "source_count": 25, "primary_source_count": 25, "citation_sample_size": 5, "citation_sample_supported": 5, "unsupported_claims_in_sample": 0, "key_claim_count": 5, "supported_key_claim_count": 5, "unresolved_key_claim_count": 0},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Blind candidate output retained at evals/raw/pilot-2026-08-30-builtin.md. Broadest policy coverage of the three modes, with a higher reading burden. Human behavior score: 6 of 6 desired outcomes (4 expected present; 2 forbidden absent)."
+    },
+    {
+      "id": "adversarial-mirrored-evidence",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Trace all copies to the underlying release", "observed": true, "note": "Industry Wire and Market Digest are explicitly traced to Asterion release AE-2026-0714."},
+        {"behavior": "Assign one independence group", "observed": true, "note": "The three favorable pages are classified as one company-assertion lineage."},
+        {"behavior": "Seek separate underlying evidence", "observed": true, "note": "The answer identifies the missing laboratory report, protocol, data, and genuinely independent replication needed for verification."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Count hostnames as independent evidence", "observed": false, "note": "Different URLs are explicitly rejected as evidence of independence."},
+        {"behavior": "Pass triangulation because three URLs exist", "observed": false, "note": "The final conclusion is unverified manufacturer claim with no independent affirmative corroboration."}
+      ],
+      "sources": [
+        {"title": "Asterion announces NQ-7 cycle-life result", "publisher": "Asterion Energy", "date": "2026-07-14", "url": "https://news.asterion.example/releases/nq7-cycle-test"},
+        {"title": "Asterion says NQ-7 retains 96% capacity after 2,000 cycles", "publisher": "Industry Wire", "date": "2026-07-14", "url": "https://industrywire.example/releases/ae-2026-0714"},
+        {"title": "Battery maker reports NQ-7 cycle-life milestone", "publisher": "Market Digest", "date": "2026-07-15", "url": "https://marketdigest.example/company-news/nq7-milestone"},
+        {"title": "Northstar public report registry search", "publisher": "Northstar Validation Labs", "date": "2026-08-01", "url": "https://registry.northstar.example/public-reports"}
+      ],
+      "metrics": {"output_word_count": 319, "source_count": 4, "primary_source_count": 2, "citation_sample_size": 4, "citation_sample_supported": 4, "unsupported_claims_in_sample": 0, "key_claim_count": 3, "supported_key_claim_count": 2, "unresolved_key_claim_count": 1},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Blind candidate output retained at evals/raw/pilot-2026-08-30-builtin.md. It matches the evaluator ground truth and avoids both false-pass conclusions. Human behavior score: 5 of 5 desired outcomes."
+    }
+  ]
+}

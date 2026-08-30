@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "run": {
+    "id": "pilot-readiness-combined-20260830",
+    "date": "2026-08-30",
+    "mode": "combined",
+    "model": "current Codex thread; model identifier unavailable",
+    "prompt_revision": "catalog-v1@16ab256",
+    "tools": ["local file inspection", "GitHub CLI"],
+    "source_access": "repository and offline fixture only"
+  },
+  "cases": [
+    {
+      "id": "policy-semiconductor-current",
+      "status": "not_evaluated",
+      "expected_trigger": true,
+      "actual_trigger": null,
+      "expected_behavior_results": [
+        {"behavior": "Use exact policy dates", "observed": null, "note": "Fresh isolated mode run not started."},
+        {"behavior": "Prefer official primary sources", "observed": null, "note": "Fresh isolated mode run not started."},
+        {"behavior": "Separate enacted policy from proposals", "observed": null, "note": "Fresh isolated mode run not started."},
+        {"behavior": "Record geographic limits", "observed": null, "note": "Fresh isolated mode run not started."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Treat a press report as the governing legal text", "observed": null, "note": "Fresh isolated mode run not started."},
+        {"behavior": "Use current without an exact date", "observed": null, "note": "Fresh isolated mode run not started."}
+      ],
+      "sources": [],
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "A fair three-mode comparison requires fresh isolated contexts with the same source-access policy."
+    },
+    {
+      "id": "adversarial-mirrored-evidence",
+      "status": "blocked",
+      "expected_trigger": true,
+      "actual_trigger": null,
+      "expected_behavior_results": [
+        {"behavior": "Trace all copies to the underlying release", "observed": null, "note": "Candidate run invalid because evaluator ground truth was exposed in this context."},
+        {"behavior": "Assign one independence group", "observed": null, "note": "Candidate run invalid because evaluator ground truth was exposed in this context."},
+        {"behavior": "Seek separate underlying evidence", "observed": null, "note": "Candidate run invalid because evaluator ground truth was exposed in this context."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Count hostnames as independent evidence", "observed": null, "note": "No valid blinded candidate run exists."},
+        {"behavior": "Pass triangulation because three URLs exist", "observed": null, "note": "No valid blinded candidate run exists."}
+      ],
+      "sources": [],
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "The coordinating thread inspected ground-truth.json before a candidate run, so scoring would be contaminated."
+    },
+    {
+      "id": "routing-simple-capital",
+      "status": "not_evaluated",
+      "expected_trigger": false,
+      "actual_trigger": null,
+      "expected_behavior_results": [
+        {"behavior": "Answer directly without a deep-research workflow", "observed": null, "note": "Routing must be tested in a fresh context with implicit skill selection."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Create a multi-step research plan", "observed": null, "note": "Fresh routing run not started."},
+        {"behavior": "Require an evidence ledger", "observed": null, "note": "Fresh routing run not started."}
+      ],
+      "sources": [],
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "The current context already loaded both research skills, so it cannot measure implicit routing fairly."
+    }
+  ]
+}

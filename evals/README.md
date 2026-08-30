@@ -15,6 +15,15 @@ Run every trigger case in three modes:
 Non-trigger cases test routing only and should be answered without a research
 workflow.
 
+Cases with a `fixture` field must be run with only the candidate material named
+by that fixture. Evaluator-only ground truth must not be exposed to the mode
+being scored.
+
+Each compared mode must run in a fresh context. Do not load another mode's
+output or evaluator-only ground truth into the candidate context. If isolation
+is unavailable or ground truth was exposed, record the case as `blocked` or
+`not_evaluated` instead of assigning scores.
+
 ## Recording a run
 
 For each case and mode, record:
@@ -28,9 +37,29 @@ For each case and mode, record:
 - token or monetary cost when the runtime exposes it;
 - reviewer notes and links to retained artifacts.
 
+Completed cases also use a `metrics` object. Counts are deliberately simple
+and reviewable: final-answer words, sources reported in the raw answer, primary
+sources, sampled citations and supported samples, unsupported claims found in
+that sample, and key claims classified as supported or unresolved. These metrics distinguish
+answers that satisfy the same safety rubric but differ materially in coverage,
+precision, and reading cost. They are not a single composite quality score.
+
+Raw candidate responses belong in `evals/raw/`. Freeze them before exposing
+the candidate runner to catalog expectations or evaluator-only ground truth.
+
 Do not combine runs from different models, source access, or prompt revisions
 without labeling the difference. Do not publish benchmark scores until the raw
 case-level results and evaluation method are reviewable.
+
+Validate a retained result file against the catalog with:
+
+```powershell
+python scripts\eval_results.py path\to\result.json --allow-partial
+```
+
+`--allow-partial` is required for a pilot that intentionally runs only part of
+the catalog. Validation checks structure and catalog consistency; it does not
+turn reviewer judgments into objective quality measurements.
 
 ## Catalog validation
 

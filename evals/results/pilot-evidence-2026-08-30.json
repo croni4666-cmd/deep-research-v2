@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "run": {
+    "id": "pilot-evidence-20260830",
+    "date": "2026-08-30",
+    "mode": "evidence",
+    "model": "isolated Codex subagent; model identifier unavailable",
+    "prompt_revision": "catalog-v1@16ab256",
+    "tools": ["evidence-deep-research", "web search", "official-page inspection", "local fixture reading", "isolated routing check"],
+    "source_access": "open web for policy case; four authorized fixture sources only for mirrored-evidence case; no tools for routing case"
+  },
+  "cases": [
+    {
+      "id": "policy-semiconductor-current",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Use exact policy dates", "observed": true, "note": "Answer uses an exact 2026-08-30 cutoff and dates the inspected measures."},
+        {"behavior": "Prefer official primary sources", "observed": true, "note": "Government legal, tax, budget, and program records dominate the source set."},
+        {"behavior": "Separate enacted policy from proposals", "observed": true, "note": "The table separates current measures from proposals and distinguishes authorization, selection, final award, and disbursement."},
+        {"behavior": "Record geographic limits", "observed": true, "note": "Each jurisdiction is scoped separately, including the EU budget versus national and private components."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Treat a press report as the governing legal text", "observed": false, "note": "Status judgments rely on official sources rather than press coverage."},
+        {"behavior": "Use current without an exact date", "observed": false, "note": "The answer begins with the exact 2026-08-30 assessment date."}
+      ],
+      "sources": [
+        {"title": "New-era policies for high-quality development of integrated circuits and software", "publisher": "State Council of China, republished by MIIT", "date": "2020-07-27", "url": "https://www.miit.gov.cn/xwdt/szyw/art/2020/art_b5059afaa450422a820648c635d653f6.html"},
+        {"title": "Notice on the 2025 eligibility list for integrated-circuit and software tax preferences", "publisher": "National Development and Reform Commission", "date": "2025-04-01", "url": "https://www.ndrc.gov.cn/xxgk/zcfb/tz/202504/t20250401_1396946.html"},
+        {"title": "CHIPS for America", "publisher": "NIST, U.S. Department of Commerce", "date": "2026-08-30", "url": "https://www.nist.gov/chips"},
+        {"title": "Letters of Intent With 7 Companies for $874 Million", "publisher": "NIST, U.S. Department of Commerce", "date": "2026-07-29", "url": "https://www.nist.gov/news-events/news/2026/07/department-commerce-announces-letters-intent-7-companies-874-million"},
+        {"title": "Information Processing Promotion Act", "publisher": "Japan Ministry of Economy, Trade and Industry", "date": "2026-08-30", "url": "https://www.meti.go.jp/policy/mono_info_service/joho/laws/josokuho.html"},
+        {"title": "Regulation (EU) 2023/1781, European Chips Act", "publisher": "European Parliament and Council", "date": "2023-09-13", "url": "https://eur-lex.europa.eu/eli/reg/2023/1781/oj/eng"},
+        {"title": "Proposal for the Chips Act 2.0, COM(2026) 504", "publisher": "European Commission", "date": "2026-06-03", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex:52026PC0504"}
+      ],
+      "metrics": {"output_word_count": 650, "source_count": 14, "primary_source_count": 14, "citation_sample_size": 5, "citation_sample_supported": 5, "unsupported_claims_in_sample": 0, "key_claim_count": 5, "supported_key_claim_count": 5, "unresolved_key_claim_count": 0},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Blind candidate output retained at evals/raw/pilot-2026-08-30-evidence.md. The most concise of the research modes and especially clear about evidence-stage non-equivalence. Human behavior score: 6 of 6 desired outcomes."
+    },
+    {
+      "id": "adversarial-mirrored-evidence",
+      "status": "completed",
+      "expected_trigger": true,
+      "actual_trigger": true,
+      "expected_behavior_results": [
+        {"behavior": "Trace all copies to the underlying release", "observed": true, "note": "Both derivative publications are traced to Asterion release AE-2026-0714."},
+        {"behavior": "Assign one independence group", "observed": true, "note": "All three favorable publications are treated as one evidence group."},
+        {"behavior": "Seek separate underlying evidence", "observed": true, "note": "The answer specifies an authenticated Northstar report, inspectable data, and independent replication as upgrade evidence."}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Count hostnames as independent evidence", "observed": false, "note": "Publisher and URL multiplicity are explicitly rejected as independence."},
+        {"behavior": "Pass triangulation because three URLs exist", "observed": false, "note": "The performance claim remains unresolved rather than triangulated."}
+      ],
+      "sources": [
+        {"title": "Asterion announces NQ-7 cycle-life result", "publisher": "Asterion Energy", "date": "2026-07-14", "url": "https://news.asterion.example/releases/nq7-cycle-test"},
+        {"title": "Asterion says NQ-7 retains 96% capacity after 2,000 cycles", "publisher": "Industry Wire", "date": "2026-07-14", "url": "https://industrywire.example/releases/ae-2026-0714"},
+        {"title": "Battery maker reports NQ-7 cycle-life milestone", "publisher": "Market Digest", "date": "2026-07-15", "url": "https://marketdigest.example/company-news/nq7-milestone"},
+        {"title": "Northstar public report registry search", "publisher": "Northstar Validation Labs", "date": "2026-08-01", "url": "https://registry.northstar.example/public-reports"}
+      ],
+      "metrics": {"output_word_count": 281, "source_count": 4, "primary_source_count": 2, "citation_sample_size": 4, "citation_sample_supported": 4, "unsupported_claims_in_sample": 0, "key_claim_count": 3, "supported_key_claim_count": 2, "unresolved_key_claim_count": 1},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Blind candidate output retained at evals/raw/pilot-2026-08-30-evidence.md. It matches evaluator ground truth and carefully avoids treating registry absence as disproof. Human behavior score: 5 of 5 desired outcomes."
+    },
+    {
+      "id": "routing-simple-capital",
+      "status": "completed",
+      "expected_trigger": false,
+      "actual_trigger": false,
+      "expected_behavior_results": [
+        {"behavior": "Answer directly without a deep-research workflow", "observed": true, "note": "The exact raw answer was only 'Paris.'"}
+      ],
+      "forbidden_behavior_results": [
+        {"behavior": "Create a multi-step research plan", "observed": false, "note": "The isolated runner reported no plan."},
+        {"behavior": "Require an evidence ledger", "observed": false, "note": "The isolated runner reported no ledger."}
+      ],
+      "sources": [],
+      "metrics": {"output_word_count": 1, "source_count": 0, "primary_source_count": 0, "citation_sample_size": 0, "citation_sample_supported": 0, "unsupported_claims_in_sample": 0, "key_claim_count": 1, "supported_key_claim_count": 1, "unresolved_key_claim_count": 0},
+      "elapsed_seconds": null,
+      "cost": null,
+      "notes": "Fresh implicit-routing output retained at evals/raw/pilot-2026-08-30-routing.md. No tools or web research were used. Human behavior score: 3 of 3 desired outcomes."
+    }
+  ]
+}
