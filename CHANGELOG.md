@@ -16,6 +16,10 @@
   output, source, claim, and citation-sample metrics to completed results.
 - Added a second-pass compression rule after the pilot showed that all modes
   could meet the safety rubric while differing substantially in reading cost.
+- Added final canonical-release verification for latest-version claims after a
+  second-round candidate reported the previous Dagster release as current.
+- Added a duplicate-row check after compression produced a repeated benchmark
+  entry in an otherwise supported academic synthesis.
 
 ## 2.2.0 - 2026-08-30
 

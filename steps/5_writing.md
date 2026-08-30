@@ -20,6 +20,8 @@ claims across tables and prose, and background that does not change the
 conclusion, uncertainty, or decision. Keep the complete source inventory in a
 short appendix or retained artifact when auditability requires it. Do not trade
 away material caveats or conflicting evidence merely to shorten the answer.
+Scan tables and lists for repeated entities, datasets, claims, or rows before
+delivery; consolidation must not create accidental duplicates.
 
 Before finishing, check that key conclusions have inspected support, citations
 are reachable and relevant, and unresolved issues are visible. Deliver in the
