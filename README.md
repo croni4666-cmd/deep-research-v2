@@ -86,6 +86,19 @@ python <skill-creator-dir>\scripts\quick_validate.py .
 GitHub Actions runs compilation, adversarial tests, and a CLI smoke test on
 Python 3.12 and 3.13.
 
+## Forward evaluation
+
+The versioned catalog in [`evals/cases.json`](evals/cases.json) covers routing,
+policy, market, medical, academic, technical, and adversarial scenarios. Check
+its schema and coverage with:
+
+```powershell
+python scripts\eval_catalog.py evals\cases.json --strict
+```
+
+See [`evals/README.md`](evals/README.md) for the comparison protocol. Catalog
+validation does not run a model or create benchmark scores.
+
 ## Scope and limitations
 
 - Source availability, model judgment, and tool behavior still affect quality.
