@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "fixture": "registry-absence",
+  "fictional": true,
+  "supported_conclusion": "The company claim is not independently verified by the available registry as of 2026-08-31. Because the claim is only nine days old and the registry permits a 30-day publication lag, the absence does not prove that no certificate exists.",
+  "unsupported_conclusions": [
+    "The company release independently verifies certification.",
+    "The registry proves the product is not certified.",
+    "No publication lag applies."
+  ]
+}

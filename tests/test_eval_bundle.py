@@ -96,6 +96,38 @@ class EvalBundleTests(unittest.TestCase):
             self.assertFalse(any("ground-truth" in path for path in candidate_paths))
             self.assertEqual(validate_bundle(bundle, ROOT)["verdict"], "PASS")
 
+    def test_high_discrimination_suite_adds_three_offline_traps(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle, manifest = create_bundle(
+                root=ROOT,
+                suites_path=ROOT / "evals" / "suites.json",
+                catalog_path=ROOT / "evals" / "cases.json",
+                suite_id="offline-regression-v2",
+                mode="evidence",
+                model="test-model",
+                output_parent=Path(temporary),
+            )
+            self.assertEqual(len(manifest["cases"]), 6)
+            self.assertEqual(
+                {case["id"] for case in manifest["cases"]} - {
+                    "adversarial-mirrored-evidence",
+                    "adversarial-current-release-status",
+                    "adversarial-duplicate-table-row",
+                },
+                {
+                    "adversarial-denominator-reversal",
+                    "adversarial-registry-absence",
+                    "adversarial-capacity-definition",
+                },
+            )
+            candidate_paths = [
+                item["path"]
+                for case in manifest["cases"]
+                for item in case["candidate_files"]
+            ]
+            self.assertFalse(any("ground-truth" in path for path in candidate_paths))
+            self.assertEqual(validate_bundle(bundle, ROOT)["verdict"], "PASS")
+
     def test_matrix_prepares_every_mode_and_repeat_and_detects_drift(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             matrix_dir, matrix = create_matrix(
@@ -129,6 +161,29 @@ class EvalBundleTests(unittest.TestCase):
                 "matrix.manifest_hash_mismatch",
                 {item["code"] for item in validation["issues"]},
             )
+
+    def test_high_discrimination_matrix_declares_54_case_runs(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            matrix_dir, matrix = create_matrix(
+                root=ROOT,
+                suites_path=ROOT / "evals" / "suites.json",
+                catalog_path=ROOT / "evals" / "cases.json",
+                suite_id="offline-regression-v2",
+                model="test-model",
+                output_parent=Path(temporary),
+                now=datetime(2026, 8, 31, 4, 5, 6, tzinfo=UTC),
+            )
+            case_runs = 0
+            for bundle in matrix["bundles"]:
+                manifest = json.loads(
+                    (matrix_dir / bundle["path"] / "manifest.json").read_text(
+                        encoding="utf-8"
+                    )
+                )
+                case_runs += len(manifest["cases"])
+            self.assertEqual(len(matrix["bundles"]), 9)
+            self.assertEqual(case_runs, 54)
+            self.assertEqual(validate_matrix(matrix_dir, ROOT)["verdict"], "PASS")
 
 
 if __name__ == "__main__":

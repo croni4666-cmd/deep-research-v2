@@ -8,17 +8,16 @@ It uses the tools and model available in the active Codex runtime. Its optional
 Python helpers validate plan and evidence structure; they do not perform web
 research or prove factual correctness.
 
-## What changed in 2.4.1
+## What changed in 2.5.0
 
-- Reviewed matrices now materialize into validated schema-v2 case results,
-  same-repeat three-mode comparisons, and a descriptive mode summary.
-- Result generation fails closed on incomplete review chains, unexpected source
-  URLs, incompatible comparisons, existing output directories, and missing
-  model identity for release claims.
-- Blinded review paths may contain an exact catalog case ID such as
-  `adversarial-mirrored-evidence` without weakening mode-leak detection.
-- Retained evidence, reported URL counts, and human primary-source counts remain
-  separate measurements instead of being forced into false equality.
+- A high-discrimination `offline-regression-v2` suite adds three reproducible
+  adversarial cases after the original suite reached a quality ceiling.
+- Denominator reversal tests whether headline percentages are normalized before
+  ranking systems.
+- Registry absence tests whether bounded negative evidence is mistaken for
+  proof that a certification does not exist.
+- Capacity-definition conflict tests exact data dates, primary-source recency,
+  and separation of nameplate from usable capacity.
 
 ## Install in Codex
 
@@ -80,7 +79,7 @@ library.
 ```powershell
 python -m compileall -q scripts tests
 python -m unittest discover -s tests -v
-python scripts\release_check.py --expected-version 2.4.1
+python scripts\release_check.py --expected-version 2.5.0
 python <skill-creator-dir>\scripts\quick_validate.py .
 ```
 

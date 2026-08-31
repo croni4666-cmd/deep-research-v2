@@ -62,6 +62,18 @@ runs with:
 python scripts\eval_bundle.py validate-matrix path\to\run-matrix
 ```
 
+`offline-regression-v1` retains the original three-case baseline. Use
+`offline-regression-v2` for a higher-discrimination six-case matrix that also
+tests denominator reversal, bounded negative evidence, and conflicts between
+data dates and metric definitions:
+
+```powershell
+python scripts\eval_bundle.py create-matrix `
+  --suite offline-regression-v2 `
+  --model "exact-model-id" `
+  --output path\to\run-matrices
+```
+
 Every matrix entry has a random `blind_id`. Keep `matrix.json`, which maps
 `blind_id` to mode and repeat, away from reviewers. Store each case answer and
 its downstream artifacts under the blind path:
@@ -257,7 +269,7 @@ complete until all of the following are true:
 1. the same identifiable model and declared source access were used across
    compared modes;
 2. `validate-matrix` passes before and after execution;
-3. `eval_status.py --require-stage reviewed` passes for all 27 case runs;
+3. `eval_status.py --require-stage reviewed` passes for every declared case run;
 4. raw answers, automatic metric reports, both independent reviews,
    adjudications, and final reviews are retained;
 5. `eval_matrix_results.py` produces every expected case result and comparison;

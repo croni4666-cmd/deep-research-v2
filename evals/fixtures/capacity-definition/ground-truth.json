@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "fixture": "capacity-definition",
+  "fictional": true,
+  "supported_conclusion": "As of 2026-08-31, the official dashboard reports 500 MW nameplate and 420 MW usable capacity. The 460 MW news figure was published later than its 2026-07-31 data date, is older than the dashboard snapshot, and uses an undefined available-capacity label.",
+  "unsupported_conclusions": [
+    "Current official capacity is 460 MW.",
+    "Nameplate and usable capacity are interchangeable.",
+    "The news figure is based on 2026-08-25 data."
+  ]
+}

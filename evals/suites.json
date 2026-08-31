@@ -50,6 +50,16 @@
       "repeats": 3,
       "live_web": false,
       "source_access": "Only each case's declared fixture candidate sources; evaluator ground truth is excluded."
+    },
+    {
+      "id": "offline-regression-v2",
+      "title": "High-discrimination offline evidence regressions",
+      "purpose": "Test independence, status, output structure, denominator normalization, negative-evidence limits, and date-sensitive definitions without live-web variability.",
+      "case_ids": ["adversarial-mirrored-evidence", "adversarial-current-release-status", "adversarial-duplicate-table-row", "adversarial-denominator-reversal", "adversarial-registry-absence", "adversarial-capacity-definition"],
+      "modes": ["builtin", "evidence", "combined"],
+      "repeats": 3,
+      "live_web": false,
+      "source_access": "Only each case's declared fixture candidate sources; evaluator ground truth is excluded."
     }
   ]
 }
