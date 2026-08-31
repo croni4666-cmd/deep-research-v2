@@ -8,17 +8,18 @@ It uses the tools and model available in the active Codex runtime. Its optional
 Python helpers validate plan and evidence structure; they do not perform web
 research or prove factual correctness.
 
-## What changed in 2.2.0
+## What changed in 2.4.0
 
-- The installed skill is named `evidence-deep-research` to avoid colliding with
-  built-in or plugin-provided Deep Research skills.
-- Research quality is tracked with a structured claim/evidence ledger.
-- Independent evidence means different underlying records, datasets,
-  experiments, or observations—not merely different websites.
-- Legacy URL-counting, self-PASS markers, placeholder execution modes, and the
-  invalid Cohen's kappa approximation were removed.
-- Adversarial tests cover empty evidence, arbitrary URLs, copied evidence on
-  different hosts, strict warnings, and output overwrite protection.
+- Versioned suites and hash-addressed run matrices make repeated evaluations
+  reproducible without claiming that prepared bundles are completed runs.
+- Result schema v2 links suites, repeats, raw artifacts, automatic measurements,
+  and human metric provenance while retaining schema-v1 compatibility.
+- Offline fixtures test copied evidence, stale release status, and duplicate
+  Markdown table rows without live-web variability.
+- Blinded two-reviewer sheets, explicit disagreement adjudication, and final
+  review reconstruction keep semantic quality judgments human and auditable.
+- Prepared, raw, measured, and reviewed completion gates prevent infrastructure
+  readiness from being presented as comparative benchmark evidence.
 
 ## Install in Codex
 
@@ -80,6 +81,7 @@ library.
 ```powershell
 python -m compileall -q scripts tests
 python -m unittest discover -s tests -v
+python scripts\release_check.py --expected-version 2.4.0
 python <skill-creator-dir>\scripts\quick_validate.py .
 ```
 
