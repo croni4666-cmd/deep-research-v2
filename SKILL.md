@@ -7,7 +7,7 @@ description: >-
   competitive, or trend research. Do not use for quick factual lookups or
   requests that do not benefit from a multi-source research workflow.
 metadata:
-  version: 2.5.0
+  version: 2.6.0
   author: croni4666-cmd
 ---
 
@@ -33,19 +33,22 @@ does not imply that every answer must be long.
 
 ## Workflow
 
-1. Frame the decision, actor, geography, time window, definitions, exclusions,
+1. Establish the runtime capability level before claiming that this Skill ran.
+   Read [references/runtime-compatibility.md](references/runtime-compatibility.md)
+   when the runtime is not Codex or tool availability is unclear.
+2. Frame the decision, actor, geography, time window, definitions, exclusions,
    and desired deliverable. Read [steps/0_region.md](steps/0_region.md) only
    when location or population materially changes the evidence.
-2. Establish the minimum factual baseline using
+3. Establish the minimum factual baseline using
    [steps/1_background.md](steps/1_background.md).
-3. Resolve material ambiguity and set an evidence bar using
+4. Resolve material ambiguity and set an evidence bar using
    [steps/2_judgment.md](steps/2_judgment.md).
-4. Create 3-7 non-overlapping research questions and stopping conditions using
+5. Create 3-7 non-overlapping research questions and stopping conditions using
    [steps/3_analysis.md](steps/3_analysis.md). For broad or costly research,
    present the plan and wait for approval unless the user already approved it.
-5. Inspect primary sources, cross-check important claims, and maintain a claim
+6. Inspect primary sources, cross-check important claims, and maintain a claim
    and evidence ledger using [steps/4_research.md](steps/4_research.md).
-6. Lead with the supported conclusion, distinguish fact from inference, and
+7. Lead with the supported conclusion, distinguish fact from inference, and
    expose uncertainty using [steps/5_writing.md](steps/5_writing.md).
 
 Read only the step needed for the current stage. The step files guide judgment;
@@ -55,6 +58,9 @@ they are not a rigid trace protocol and never override user or runtime policy.
 
 - Search snippets are discovery aids, not evidence. Inspect the source page or
   document before relying on it.
+- When a source is blocked, metadata-only, unstable, or superseded, follow
+  [references/source-access.md](references/source-access.md) and record what was
+  actually inspected. Never describe metadata or a snippet as full text.
 - Prefer primary and authoritative sources. Use secondary sources for context,
   criticism, or discovery, and trace consequential claims to underlying
   evidence when possible.
@@ -84,6 +90,8 @@ claim is true or that a citation entails it.
 - `scripts/plan_preview.py`: create a collision-safe research plan preview.
 - `scripts/evidence_audit.py`: validate a structured evidence ledger and fail
   closed on missing claims, missing evidence, or false independence.
+- `scripts/runtime_check.py`: classify a declared runtime capability manifest
+  as native, compatible, or protocol-only without probing private resources.
 
 Inspect scripts before first use and keep generated files in a temporary or
 user-authorized location.

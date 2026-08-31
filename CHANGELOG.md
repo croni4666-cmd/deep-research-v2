@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.6.0 - 2026-08-31
+
+- Added explicit native, compatible, and protocol-only runtime capability
+  profiles, preventing prompt simulations from being labeled as Skill runs.
+- Added a platform-neutral MiniMax Mini-Agent installation profile and portable
+  package builder while keeping the core Skill free of vendor SDK dependencies.
+- Added evidence-ledger schema v2 access states for full text, partial text,
+  metadata-only records, blocked sources, and secondary substitutes.
+- Made blocked and metadata-only records ineligible as supporting evidence in
+  deterministic audits while retaining schema-v1 compatibility.
+- Added lawful source-access fallbacks for publisher blocks, ClinicalTrials.gov
+  structured data, government URL drift, and dynamic pages.
+- Added runtime, package, access-state, and archived-result regression tests.
+
 ## 2.5.0 - 2026-08-31
 
 - Added `offline-regression-v2`, a six-case, three-mode, three-repeat suite

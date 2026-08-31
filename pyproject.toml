@@ -1,7 +1,7 @@
 [project]
 name = "evidence-deep-research-skill"
-version = "2.5.0"
-description = "Codex skill for traceable, evidence-backed deep research"
+version = "2.6.0"
+description = "Portable agent skill for traceable, evidence-backed deep research"
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
 authors = [{ name = "croni4666-cmd" }]

@@ -19,6 +19,10 @@ For each research question:
 1. Search with relevant dates, geography, entities, and source filters.
 2. Inspect the source and record its publication date, data/event date,
    methodology, population or geography, and important limitations.
+   Record whether access was full text, partial text, metadata only, blocked,
+   or a secondary substitute. Follow
+   [../references/source-access.md](../references/source-access.md) when the
+   canonical source is unavailable or unstable.
 3. Record each consequential claim and its evidence. For reusable or
    consequential work, use
    [../references/evidence-ledger.md](../references/evidence-ledger.md).

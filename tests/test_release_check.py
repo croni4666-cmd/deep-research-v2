@@ -11,7 +11,7 @@ ROOT = Path(__file__).parents[1]
 
 class ReleaseCheckTests(unittest.TestCase):
     def test_repository_release_metadata_is_consistent(self) -> None:
-        result = check_release(ROOT, "2.5.0")
+        result = check_release(ROOT, "2.6.0")
         self.assertEqual(result["verdict"], "PASS", result["issues"])
 
     def test_mismatched_skill_version_and_unreleased_date_fail(self) -> None:

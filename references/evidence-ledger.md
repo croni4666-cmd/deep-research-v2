@@ -5,7 +5,7 @@ will be checked by `scripts/evidence_audit.py`.
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "research_questions": [
     {"id": "RQ1", "question": "...", "status": "resolved"}
   ],
@@ -23,6 +23,7 @@ will be checked by `scripts/evidence_audit.py`.
           "publisher": "Publisher",
           "published_at": "2026-08-01",
           "accessed_at": "2026-08-30",
+          "access": "full_text",
           "location": "Table 2, page 14",
           "excerpt": "Short quotation or accurate paraphrase of the relevant passage",
           "stance": "supports",
@@ -41,6 +42,11 @@ will be checked by `scripts/evidence_audit.py`.
 - `importance`: `key` or `supporting`.
 - `status`: `verified`, `qualified`, or `unresolved`.
 - `stance`: `supports`, `contradicts`, or `context`.
+- `access`: `full_text`, `partial_text`, `metadata_only`, `blocked`, or
+  `secondary_substitute`. This records what was actually inspected.
+- `full_text`, `partial_text`, and `secondary_substitute` require a precise
+  `location` and `excerpt`. `metadata_only` and `blocked` require an
+  `access_note` describing the limitation and cannot support a claim.
 - `independence_group` identifies the underlying record, dataset, experiment,
   or direct observation. Different websites reproducing the same material use
   the same group.
@@ -52,3 +58,6 @@ will be checked by `scripts/evidence_audit.py`.
 
 The ledger records traceability. It does not replace inspecting the source or
 judging whether the evidence supports the wording of the claim.
+
+Schema version 1 remains accepted for old ledgers, with access reported as
+`legacy_unspecified`. New ledgers should use version 2.
