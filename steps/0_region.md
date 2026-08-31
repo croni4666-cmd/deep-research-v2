@@ -17,3 +17,5 @@ downgrade a source solely because of its language.
 
 Output a short region note for use in later source selection. Do not search yet
 unless source discovery is necessary to identify the governing jurisdiction.
+For regional, jurisdictional, or cross-country work, continue with
+[../references/region-source-routing.md](../references/region-source-routing.md).

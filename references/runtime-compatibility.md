@@ -48,3 +48,8 @@ capabilities from a product name or from API compatibility alone.
 
 Runtime formats can change. Re-run the capability declaration after upgrades
 or when tools, MCP servers, permissions, or model settings change.
+
+When `runtime_check.py` reports `parallel_research_candidate: true`, this means
+only that the declared Skill, source-inspection, and subagent capabilities are
+compatible with the parallel protocol. Confirm that workers inherit the needed
+source tools before following `parallel-research.md`.

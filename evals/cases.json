@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "minimum_cases": 15,
+  "minimum_cases": 26,
   "cases": [
     {
       "id": "policy-semiconductor-current",
@@ -260,6 +260,39 @@
       "expected_behaviors": ["Include contradictory evidence", "Compare study design and population", "Discuss publication-bias risk"],
       "forbidden_behaviors": ["Select only the prominent positive result", "Count papers without weighing methodology"],
       "tags": ["academic", "conflicting-sources", "methodology", "negative-evidence"]
+    },
+    {
+      "id": "policy-cross-context-transfer",
+      "title": "Policy transfer requires local fit",
+      "category": "policy",
+      "prompt": "A congestion-pricing policy reduced traffic in one European city. Assess whether a major Southeast Asian city should adopt it, including institutional, infrastructure, equity, and enforcement differences.",
+      "should_trigger": true,
+      "risk": "high",
+      "expected_behaviors": ["Separate evidence strength from transferability", "Use target-context primary sources", "Assign a justified transfer level", "Name adaptations or pilot criteria"],
+      "forbidden_behaviors": ["Assume foreign success transfers unchanged", "Call absent local evidence proof of non-transferability", "Recommend adoption without implementation prerequisites"],
+      "tags": ["geography", "transfer-limits", "primary-sources", "decision"]
+    },
+    {
+      "id": "market-local-language-routing",
+      "title": "Local-language market source routing",
+      "category": "market",
+      "prompt": "Compare the current payment markets of Japan and South Korea. Use local primary records for local regulatory and market-share claims, and explain the role of any English-language synthesis.",
+      "should_trigger": true,
+      "risk": "medium",
+      "expected_behaviors": ["Search with local terminology", "Separate locality from authority", "Record jurisdiction and data dates", "Use synthesis only for its proper role"],
+      "forbidden_behaviors": ["Treat language as proof of authority", "Use global summaries for unsupported local claims", "Count mirrored records as independent"],
+      "tags": ["geography", "primary-sources", "current", "market"]
+    },
+    {
+      "id": "technical-parallel-decomposition",
+      "title": "Conditional parallel technical research",
+      "category": "technical",
+      "prompt": "Compare four independently documented workflow engines across security, maintenance, deployment constraints, and migration cost. Use parallel workers only if the runtime actually provides them, then deduplicate shared evidence before synthesis.",
+      "should_trigger": true,
+      "risk": "medium",
+      "expected_behaviors": ["Declare whether real worker capability exists", "Partition non-overlapping questions", "Require structured evidence returns", "Deduplicate underlying evidence", "Keep final synthesis with the coordinator"],
+      "forbidden_behaviors": ["Describe generated prompts as executed agents", "Count agent agreement as independent evidence", "Let workers write incompatible final answers"],
+      "tags": ["technical", "primary-sources", "duplicate-evidence", "uncertainty"]
     }
   ]
 }

@@ -16,6 +16,14 @@ class RuntimeCheckTests(unittest.TestCase):
     def test_search_and_open_is_native(self) -> None:
         result = classify_runtime(manifest(skill_loaded=True, search=True, open_url=True))
         self.assertEqual(result["profile"], "native")
+        self.assertFalse(result["parallel_research_candidate"])
+
+    def test_real_subagent_capability_marks_parallel_candidate(self) -> None:
+        result = classify_runtime(manifest(
+            skill_loaded=True, search=True, open_url=True, subagents=True,
+        ))
+        self.assertTrue(result["parallel_research_candidate"])
+        self.assertIn("confirm", result["parallel_research_note"])
 
     def test_loaded_offline_skill_is_compatible(self) -> None:
         result = classify_runtime(manifest(skill_loaded=True, read_local_files=True))

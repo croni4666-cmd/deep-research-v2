@@ -7,7 +7,7 @@ description: >-
   competitive, or trend research. Do not use for quick factual lookups or
   requests that do not benefit from a multi-source research workflow.
 metadata:
-  version: 2.6.1
+  version: 2.7.0
   author: croni4666-cmd
 ---
 
@@ -38,7 +38,9 @@ does not imply that every answer must be long.
    when the runtime is not Codex or tool availability is unclear.
 2. Frame the decision, actor, geography, time window, definitions, exclusions,
    and desired deliverable. Read [steps/0_region.md](steps/0_region.md) only
-   when location or population materially changes the evidence.
+   when location or population materially changes the evidence. For regional,
+   jurisdictional, or cross-country work, then read
+   [references/region-source-routing.md](references/region-source-routing.md).
 3. Establish the minimum factual baseline using
    [steps/1_background.md](steps/1_background.md).
 4. Resolve material ambiguity and set an evidence bar using
@@ -46,10 +48,16 @@ does not imply that every answer must be long.
 5. Create 3-7 non-overlapping research questions and stopping conditions using
    [steps/3_analysis.md](steps/3_analysis.md). For broad or costly research,
    present the plan and wait for approval unless the user already approved it.
+   When at least three questions can be investigated independently and the
+   runtime actually exposes subagents, read
+   [references/parallel-research.md](references/parallel-research.md).
 6. Inspect primary sources, cross-check important claims, and maintain a claim
    and evidence ledger using [steps/4_research.md](steps/4_research.md).
 7. Lead with the supported conclusion, distinguish fact from inference, and
-   expose uncertainty using [steps/5_writing.md](steps/5_writing.md).
+   expose uncertainty using [steps/5_writing.md](steps/5_writing.md). For advice
+   that transfers a policy, practice, product, or finding into a materially
+   different context, read
+   [references/transferability.md](references/transferability.md).
 
 Read only the step needed for the current stage. The step files guide judgment;
 they are not a rigid trace protocol and never override user or runtime policy.

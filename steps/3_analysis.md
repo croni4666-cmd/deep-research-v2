@@ -11,6 +11,11 @@ Create 3-7 non-overlapping research questions. For each, identify:
 Order questions by decision impact and dependency. Define stopping conditions
 before searching so the process cannot grow without bound.
 
+If at least three questions have no unresolved dependency on one another,
+record them as parallelizable. Parallel execution is optional and only
+available when the runtime has actually declared subagent capability; follow
+[../references/parallel-research.md](../references/parallel-research.md).
+
 For broad, expensive, or materially ambiguous work, present the concise plan to
 the user and wait for approval. If the user already supplied or approved a clear
 plan, continue without another approval gate. A plan file is optional and

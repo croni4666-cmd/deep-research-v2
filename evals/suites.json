@@ -60,6 +60,16 @@
       "repeats": 3,
       "live_web": false,
       "source_access": "Only each case's declared fixture candidate sources; evaluator ground truth is excluded."
+    },
+    {
+      "id": "portable-depth-v1",
+      "title": "Region, transfer, and conditional parallelism",
+      "purpose": "Evaluate the portable depth protocols added in v2.7 without assuming vendor-specific orchestration.",
+      "case_ids": ["policy-cross-context-transfer", "market-local-language-routing", "technical-parallel-decomposition"],
+      "modes": ["evidence"],
+      "repeats": 1,
+      "live_web": true,
+      "source_access": "Live web with target-context primary sources; parallel workers only when the recorded runtime declaration and actual session provide them."
     }
   ]
 }

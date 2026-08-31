@@ -22,6 +22,13 @@ ACCESS_VALUES = {
     "full_text", "partial_text", "metadata_only", "blocked", "secondary_substitute",
 }
 SUPPORTING_ACCESS_VALUES = {"full_text", "partial_text", "secondary_substitute"}
+SOURCE_ROLE_VALUES = {
+    "local_primary", "external_primary", "high_quality_synthesis",
+    "discovery_or_experience",
+}
+TRANSFER_LEVEL_VALUES = {
+    "directly_transferable", "adaptation_required", "pilot_only", "not_transferable",
+}
 
 
 def _issue(issues: list[dict[str, str]], severity: str, code: str,
@@ -146,6 +153,33 @@ def audit_ledger(data: Any, *, min_key_sources: int = 2,
             _issue(issues, "error", "claim.invalid_status", f"{path}.status",
                    "status must be verified, qualified, or unresolved.")
 
+        transfer = claim.get("transfer_assessment")
+        if transfer is not None:
+            transfer_path = f"{path}.transfer_assessment"
+            if not isinstance(transfer, dict):
+                _issue(issues, "error", "transfer.not_object", transfer_path,
+                       "transfer_assessment must be an object when provided.")
+            else:
+                for field in ("source_context", "target_context", "rationale"):
+                    if not _nonempty_text(transfer.get(field)):
+                        _issue(issues, "error", f"transfer.missing_{field}",
+                               f"{transfer_path}.{field}", f"{field} is required.")
+                level = transfer.get("level")
+                if level not in TRANSFER_LEVEL_VALUES:
+                    _issue(issues, "error", "transfer.invalid_level",
+                           f"{transfer_path}.level",
+                           f"level must be one of {sorted(TRANSFER_LEVEL_VALUES)}.")
+                adaptations = transfer.get("adaptations", [])
+                if not isinstance(adaptations, list) or not all(
+                        _nonempty_text(item) for item in adaptations):
+                    _issue(issues, "error", "transfer.invalid_adaptations",
+                           f"{transfer_path}.adaptations",
+                           "adaptations must be an array of non-empty strings.")
+                elif level in {"adaptation_required", "pilot_only"} and not adaptations:
+                    _issue(issues, "error", "transfer.missing_adaptations",
+                           f"{transfer_path}.adaptations",
+                           "This transfer level requires at least one adaptation or test condition.")
+
         evidence = claim.get("evidence", [])
         if not isinstance(evidence, list):
             _issue(issues, "error", "evidence.not_array", f"{path}.evidence",
@@ -191,6 +225,17 @@ def audit_ledger(data: Any, *, min_key_sources: int = 2,
                 _issue(issues, "error", "evidence.invalid_published_at",
                        f"{item_path}.published_at",
                        "published_at must be empty or an ISO date (YYYY-MM-DD).")
+
+            source_role = item.get("source_role")
+            if source_role is not None and source_role not in SOURCE_ROLE_VALUES:
+                _issue(issues, "error", "evidence.invalid_source_role",
+                       f"{item_path}.source_role",
+                       f"source_role must be one of {sorted(SOURCE_ROLE_VALUES)}.")
+            for optional_field in ("geography", "population", "language"):
+                if optional_field in item and not _nonempty_text(item[optional_field]):
+                    _issue(issues, "error", f"evidence.invalid_{optional_field}",
+                           f"{item_path}.{optional_field}",
+                           f"{optional_field} must be non-empty when provided.")
 
             access = item.get("access")
             if schema_version == 2:

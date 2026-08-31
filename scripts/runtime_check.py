@@ -46,6 +46,7 @@ def classify_runtime(data: Any) -> dict[str, Any]:
     else:
         profile = "protocol-only"
         limitation = "Label output as a simulation, not a versioned Skill run."
+    parallel_candidate = profile != "protocol-only" and capabilities["subagents"]
     return {
         "verdict": "PASS",
         "profile": profile,
@@ -57,6 +58,12 @@ def classify_runtime(data: Any) -> dict[str, Any]:
         "capabilities": capabilities,
         "limitation": limitation,
         "optional_helpers_available": capabilities["read_local_files"] and capabilities["shell"],
+        "parallel_research_candidate": parallel_candidate,
+        "parallel_research_note": (
+            "Candidate only; confirm that workers inherit the required source tools."
+            if parallel_candidate else
+            "Use serial research unless real worker capability is declared and available."
+        ),
         "errors": [],
     }
 

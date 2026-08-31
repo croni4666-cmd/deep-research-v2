@@ -54,6 +54,15 @@ real-world evidence.
 - `independence_group` identifies the underlying record, dataset, experiment,
   or direct observation. Different websites reproducing the same material use
   the same group.
+- Regional work may add `source_role` (`local_primary`, `external_primary`,
+  `high_quality_synthesis`, or `discovery_or_experience`) plus non-empty
+  `geography`, `population`, and `language` fields. These dimensions do not
+  replace access or independence.
+- A recommendation that transfers evidence across contexts may add a claim-level
+  `transfer_assessment` with `source_context`, `target_context`, `level`,
+  `rationale`, and `adaptations`. Valid levels are `directly_transferable`,
+  `adaptation_required`, `pilot_only`, and `not_transferable`; adaptation and
+  pilot levels require at least one named adaptation or test condition.
 - Unresolved claims may have no supporting evidence, but they must remain
   visibly unresolved in the report.
 - A verified key claim normally needs at least two supporting independence
