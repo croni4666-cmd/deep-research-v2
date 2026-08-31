@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -23,6 +24,9 @@ METRIC_FIELDS = {
     "supported_key_claim_count",
     "unresolved_key_claim_count",
 }
+AUTOMATIC_METRIC_FIELDS = {"output_word_count", "source_count"}
+ALLOWED_METRIC_PROVENANCE = {"automatic", "human"}
+SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 
 
 def _issue(issues: list[dict[str, str]], code: str, path: str, message: str) -> None:
@@ -48,6 +52,44 @@ def _load_catalog_cases(catalog: Any) -> dict[str, dict[str, Any]]:
         for case in catalog["cases"]
         if isinstance(case, dict) and _text(case.get("id"))
     }
+
+
+def _validate_artifact_record(
+    value: Any, path: str, issues: list[dict[str, str]],
+) -> None:
+    if not isinstance(value, dict):
+        _issue(issues, "result.missing_artifact", path, "Artifact metadata is required.")
+        return
+    if not _text(value.get("path")):
+        _issue(issues, "result.invalid_artifact_path", f"{path}.path",
+               "Artifact path is required.")
+    if not isinstance(value.get("sha256"), str) or not SHA256_PATTERN.fullmatch(
+        value["sha256"]
+    ):
+        _issue(issues, "result.invalid_artifact_hash", f"{path}.sha256",
+               "Artifact sha256 must be 64 lowercase hexadecimal characters.")
+
+
+def _validate_metric_provenance(
+    value: Any, path: str, issues: list[dict[str, str]],
+) -> None:
+    if not isinstance(value, dict):
+        _issue(issues, "case.missing_metric_provenance", path,
+               "Schema v2 cases require metric provenance.")
+        return
+    missing = sorted(METRIC_FIELDS - set(value))
+    extra = sorted(set(value) - METRIC_FIELDS)
+    if missing or extra:
+        _issue(issues, "case.metric_provenance_mismatch", path,
+               f"Metric provenance differs from metrics; missing={missing}, extra={extra}.")
+    for field, source in value.items():
+        if field in METRIC_FIELDS and source not in ALLOWED_METRIC_PROVENANCE:
+            _issue(issues, "case.invalid_metric_provenance", f"{path}.{field}",
+                   f"Provenance must be one of {sorted(ALLOWED_METRIC_PROVENANCE)}.")
+    for field in AUTOMATIC_METRIC_FIELDS:
+        if value.get(field) != "automatic":
+            _issue(issues, "case.automatic_metric_not_marked", f"{path}.{field}",
+                   f"{field} must be marked automatic in schema v2.")
 
 
 def _validate_behavior_results(
@@ -141,8 +183,10 @@ def validate_results(data: Any, catalog: Any, *, allow_partial: bool = False) ->
     if not isinstance(data, dict):
         _issue(issues, "result.not_object", "$", "Result must be a JSON object.")
         return _finish(issues, {})
-    if data.get("schema_version") != 1:
-        _issue(issues, "result.schema_version", "$.schema_version", "schema_version must be 1.")
+    schema_version = data.get("schema_version")
+    if schema_version not in {1, 2}:
+        _issue(issues, "result.schema_version", "$.schema_version",
+               "schema_version must be 1 or 2.")
 
     run = data.get("run")
     if not isinstance(run, dict):
@@ -160,6 +204,21 @@ def validate_results(data: Any, catalog: Any, *, allow_partial: bool = False) ->
                f"mode must be one of {sorted(ALLOWED_MODES)}.")
     if not isinstance(run.get("tools"), list) or not all(_text(x) for x in run.get("tools", [])):
         _issue(issues, "run.invalid_tools", "$.run.tools", "tools must be a string array.")
+    if schema_version == 2:
+        if not _text(run.get("suite_id")):
+            _issue(issues, "run.missing_suite_id", "$.run.suite_id",
+                   "Schema v2 runs require suite_id.")
+        repeat = run.get("repeat")
+        if not isinstance(repeat, int) or isinstance(repeat, bool) or repeat < 1:
+            _issue(issues, "run.invalid_repeat", "$.run.repeat",
+                   "Schema v2 repeat must be a positive integer.")
+        artifacts = data.get("artifacts")
+        if not isinstance(artifacts, dict):
+            _issue(issues, "result.missing_artifacts", "$.artifacts",
+                   "Schema v2 artifact metadata is required.")
+            artifacts = {}
+        for name in ("bundle_manifest", "raw_output", "metric_extraction"):
+            _validate_artifact_record(artifacts.get(name), f"$.artifacts.{name}", issues)
 
     cases = data.get("cases")
     if not isinstance(cases, list):
@@ -244,6 +303,17 @@ def validate_results(data: Any, catalog: Any, *, allow_partial: bool = False) ->
             result.get("metrics"), f"{path}.metrics", is_completed,
             case_source_count, issues,
         )
+        if schema_version == 2:
+            _validate_metric_provenance(
+                result.get("metric_provenance"), f"{path}.metric_provenance", issues,
+            )
+            checks = result.get("automatic_checks")
+            duplicate_count = checks.get("duplicate_table_row_count") \
+                if isinstance(checks, dict) else None
+            if not isinstance(duplicate_count, int) or isinstance(duplicate_count, bool) \
+                    or duplicate_count < 0:
+                _issue(issues, "case.invalid_automatic_checks", f"{path}.automatic_checks",
+                       "Schema v2 requires a non-negative duplicate_table_row_count.")
         output_words += metrics.get("output_word_count", 0)
         reported_sources += metrics.get("source_count", 0)
         citation_sample_size += metrics.get("citation_sample_size", 0)

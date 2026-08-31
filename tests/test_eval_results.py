@@ -56,10 +56,55 @@ def sample_result() -> dict:
     }
 
 
+def sample_result_v2() -> dict:
+    data = sample_result()
+    data["schema_version"] = 2
+    data["run"].update({"suite_id": "routing-smoke-v1", "repeat": 1})
+    artifact = {"path": "artifact.json", "sha256": "a" * 64}
+    data["artifacts"] = {
+        "bundle_manifest": dict(artifact),
+        "raw_output": dict(artifact),
+        "metric_extraction": dict(artifact),
+    }
+    data["cases"][0]["metric_provenance"] = {
+        field: "automatic" if field in {"output_word_count", "source_count"} else "human"
+        for field in data["cases"][0]["metrics"]
+    }
+    data["cases"][0]["automatic_checks"] = {"duplicate_table_row_count": 0}
+    return data
+
+
 class EvalResultTests(unittest.TestCase):
     def test_valid_partial_result_passes(self) -> None:
         result = validate_results(sample_result(), CATALOG, allow_partial=True)
         self.assertEqual(result["verdict"], "PASS", result["issues"])
+
+    def test_valid_v2_partial_result_passes(self) -> None:
+        result = validate_results(sample_result_v2(), CATALOG, allow_partial=True)
+        self.assertEqual(result["verdict"], "PASS", result["issues"])
+
+    def test_v1_remains_backward_compatible(self) -> None:
+        data = sample_result()
+        self.assertNotIn("artifacts", data)
+        result = validate_results(data, CATALOG, allow_partial=True)
+        self.assertEqual(result["verdict"], "PASS", result["issues"])
+
+    def test_v2_requires_bundle_linkage(self) -> None:
+        data = sample_result_v2()
+        del data["artifacts"]["bundle_manifest"]
+        result = validate_results(data, CATALOG, allow_partial=True)
+        self.assertEqual(result["verdict"], "FAIL")
+        self.assertIn("result.missing_artifact", {item["code"] for item in result["issues"]})
+
+    def test_v2_requires_automatic_metric_provenance(self) -> None:
+        data = sample_result_v2()
+        data["cases"][0]["metric_provenance"]["source_count"] = "human"
+        result = validate_results(data, CATALOG, allow_partial=True)
+        self.assertEqual(result["verdict"], "FAIL")
+        self.assertIn(
+            "case.automatic_metric_not_marked",
+            {item["code"] for item in result["issues"]},
+        )
 
     def test_partial_result_fails_without_opt_in(self) -> None:
         result = validate_results(sample_result(), CATALOG)

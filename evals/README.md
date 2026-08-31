@@ -33,6 +33,18 @@ Revalidate the prepared bytes before and after a candidate run:
 python scripts\eval_bundle.py validate path\to\run-bundle
 ```
 
+The repeated offline regression suite covers copied evidence, stale release
+status, and duplicated Markdown table rows without live-web variability:
+
+```powershell
+python scripts\eval_bundle.py create `
+  --suite offline-regression-v1 `
+  --mode evidence `
+  --model gpt-example `
+  --repeat 1 `
+  --output path\to\run-bundles
+```
+
 ## Modes to compare
 
 Run every trigger case in three modes:
@@ -77,6 +89,20 @@ composite quality score.
 Raw candidate responses belong in `evals/raw/`. Freeze them before exposing
 the candidate runner to catalog expectations or evaluator-only ground truth.
 
+After freezing one case's raw answer, extract only deterministic measurements:
+
+```powershell
+python scripts\eval_ingest.py path\to\run-bundle\manifest.json `
+  evals\raw\candidate-answer.md `
+  --case-id adversarial-duplicate-table-row `
+  --output path\to\metric-extraction.json
+```
+
+The extraction report hashes both inputs and counts lexical words, unique
+reported HTTP(S) URLs, and repeated normalized Markdown data rows. It does not
+infer primary-source status, citation entailment, unsupported claims, claim
+support, or truth; reviewers must score those fields.
+
 Do not combine runs from different models, source access, or prompt revisions
 without labeling the difference. Do not publish benchmark scores until the raw
 case-level results and evaluation method are reviewable.
@@ -90,6 +116,16 @@ python scripts\eval_results.py path\to\result.json --allow-partial
 `--allow-partial` is required for a pilot that intentionally runs only part of
 the catalog. Validation checks structure and catalog consistency; it does not
 turn reviewer judgments into objective quality measurements.
+
+Historical schema-v1 results remain valid. New schema-v2 results add:
+
+- `run.suite_id` and the one-based `run.repeat`;
+- SHA-256 records for the bundle manifest, raw output, and metric extraction;
+- per-metric provenance (`automatic` or `human`);
+- the automatic `duplicate_table_row_count` check.
+
+In schema v2, only `output_word_count` and `source_count` are automatically
+derived. All semantic quality fields remain explicitly human-reviewed.
 
 Compare two or more completed results only when their model, prompt revision,
 source access, and completed case sets match:

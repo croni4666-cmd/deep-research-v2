@@ -69,6 +69,28 @@ class EvalBundleTests(unittest.TestCase):
                     output_parent=Path(temporary),
                 )
 
+    def test_offline_regression_bundle_exposes_only_candidate_sources(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            bundle, manifest = create_bundle(
+                root=ROOT,
+                suites_path=ROOT / "evals" / "suites.json",
+                catalog_path=ROOT / "evals" / "cases.json",
+                suite_id="offline-regression-v1",
+                mode="evidence",
+                model="test-model",
+                output_parent=Path(temporary),
+            )
+            self.assertEqual(len(manifest["cases"]), 3)
+            candidate_paths = [
+                item["path"]
+                for case in manifest["cases"]
+                for item in case["candidate_files"]
+            ]
+            self.assertGreaterEqual(len(candidate_paths), 7)
+            self.assertTrue(all("/sources/" in path for path in candidate_paths))
+            self.assertFalse(any("ground-truth" in path for path in candidate_paths))
+            self.assertEqual(validate_bundle(bundle, ROOT)["verdict"], "PASS")
+
 
 if __name__ == "__main__":
     unittest.main()

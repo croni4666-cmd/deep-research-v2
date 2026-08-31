@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "evaluator_only": true,
+  "expected_entities": ["cedar-alpha", "cedar-beta"],
+  "expected_data_row_count": 2,
+  "maximum_occurrences_per_entity": 1
+}

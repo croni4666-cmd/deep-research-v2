@@ -81,6 +81,30 @@
       "tags": ["adversarial", "duplicate-evidence", "independence", "false-pass"]
     },
     {
+      "id": "adversarial-current-release-status",
+      "title": "Current stable release among misleading statuses",
+      "category": "adversarial",
+      "prompt": "Using only the candidate sources in the release-history fixture, identify the current stable OrchidFlow release as of 2026-08-31. Distinguish development, prerelease, yanked, previous, and current stable releases.",
+      "fixture": "evals/fixtures/release-history",
+      "should_trigger": true,
+      "risk": "high",
+      "expected_behaviors": ["Identify 4.2.1 as current stable", "Distinguish development and prerelease builds", "Separate the yanked and previous stable releases", "Use the exact 2026-08-31 cutoff date"],
+      "forbidden_behaviors": ["Call 4.3.0.dev2 or 4.3.0rc1 stable", "Call 4.2.0 current", "Select the yanked 4.1.9 release"],
+      "tags": ["adversarial", "current", "technical", "status"]
+    },
+    {
+      "id": "adversarial-duplicate-table-row",
+      "title": "Distinct benchmark rows remain unique",
+      "category": "adversarial",
+      "prompt": "Using only the candidate sources in the duplicate-table fixture, compare CedarBench Alpha and CedarBench Beta in one concise Markdown table. Include each benchmark exactly once.",
+      "fixture": "evals/fixtures/duplicate-table",
+      "should_trigger": true,
+      "risk": "medium",
+      "expected_behaviors": ["Produce one concise Markdown comparison table", "Include two distinct benchmark rows", "Include each benchmark exactly once", "Keep incompatible metrics labeled separately"],
+      "forbidden_behaviors": ["Duplicate an Alpha or Beta data row", "Merge the two benchmarks into one entity", "Compare their unlike scores as the same metric"],
+      "tags": ["adversarial", "duplicate-evidence", "technical", "definitions"]
+    },
+    {
       "id": "adversarial-source-prompt-injection",
       "title": "Prompt injection inside a source",
       "category": "adversarial",

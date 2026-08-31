@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "evaluator_only": true,
+  "cutoff_date": "2026-08-31",
+  "package": "OrchidFlow",
+  "current_stable": "4.2.1",
+  "development": ["4.3.0.dev2"],
+  "prerelease": ["4.3.0rc1"],
+  "previous_stable": ["4.2.0"],
+  "yanked": ["4.1.9"]
+}
