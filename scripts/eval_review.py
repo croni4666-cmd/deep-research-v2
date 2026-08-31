@@ -31,6 +31,17 @@ MODE_PATH_PATTERN = re.compile(
 )
 
 
+def _mode_revealing_path(path: str | Path, case_ids: list[str] | tuple[str, ...]) -> bool:
+    """Ignore exact case-id path segments while still rejecting candidate mode labels."""
+    known_cases = {case_id.lower() for case_id in case_ids}
+    parts = re.split(r"[/\\]+", str(path))
+    anonymized = [
+        "case-id" if part.lower() in known_cases else part
+        for part in parts
+    ]
+    return MODE_PATH_PATTERN.search("/".join(anonymized)) is not None
+
+
 def _text(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
@@ -56,7 +67,7 @@ def prepare_review(
     cases = _catalog_cases(catalog)
     if not _text(reviewer_id):
         raise ValueError("reviewer_id is required.")
-    if MODE_PATH_PATTERN.search(raw_path.as_posix()):
+    if _mode_revealing_path(raw_path, case_ids):
         raise ValueError("Raw review artifact path reveals the candidate mode; anonymize it first.")
     try:
         date.fromisoformat(reviewed_on)
@@ -163,7 +174,14 @@ def validate_review(
     ) or not SHA256_PATTERN.fullmatch(raw["sha256"]):
         _issue(issues, "review.invalid_raw_artifact", "$.review.raw_output",
                "Raw output requires path and a 64-character sha256.")
-    elif MODE_PATH_PATTERN.search(raw["path"]):
+    elif _mode_revealing_path(
+        raw["path"],
+        [
+            item.get("id", "")
+            for item in data.get("cases", [])
+            if isinstance(item, dict) and _text(item.get("id"))
+        ],
+    ):
         _issue(issues, "review.mode_leaking_path", "$.review.raw_output.path",
                "Raw review artifact path must not reveal builtin, evidence, or combined mode.")
 

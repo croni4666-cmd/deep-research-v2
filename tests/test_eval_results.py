@@ -188,6 +188,24 @@ class EvalResultTests(unittest.TestCase):
             {item["code"] for item in result["issues"]},
         )
 
+    def test_human_primary_count_can_exceed_reported_url_count(self) -> None:
+        data = sample_result_v2()
+        data["cases"][0]["metrics"]["primary_source_count"] = 2
+        result = validate_results(data, CATALOG, allow_partial=True)
+        self.assertEqual(result["verdict"], "PASS", result["issues"])
+
+    def test_retained_sources_can_exceed_reported_url_count(self) -> None:
+        data = sample_result_v2()
+        data["cases"][0]["sources"] = [{
+            "title": "Retained local source",
+            "publisher": "Fixture publisher",
+            "date": "2026-08-31",
+            "url": "https://fixture.example/source",
+        }]
+        data["cases"][0]["metrics"]["source_count"] = 0
+        result = validate_results(data, CATALOG, allow_partial=True)
+        self.assertEqual(result["verdict"], "PASS", result["issues"])
+
 
 if __name__ == "__main__":
     unittest.main()
