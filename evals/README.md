@@ -62,6 +62,42 @@ runs with:
 python scripts\eval_bundle.py validate-matrix path\to\run-matrix
 ```
 
+Every matrix entry has a random `blind_id`. Keep `matrix.json`, which maps
+`blind_id` to mode and repeat, away from reviewers. Store each case answer and
+its downstream artifacts under the blind path:
+
+```text
+run-matrix/
+  blind-artifacts/
+    candidate-<opaque-id>/
+      <case-id>/
+        raw.md
+        metrics.json
+        review-a.json
+        review-b.json
+        adjudication.json
+        final-review.json
+```
+
+Use one `raw.md` per case. Combining several cases in one raw file makes word,
+source, and duplicate-row measurements non-comparable. The operator may see
+the matrix mapping to dispatch the correct mode; candidate runners receive only
+their bundle, and reviewers receive only anonymized case artifacts.
+
+Inspect honest completion state at any time:
+
+```powershell
+python scripts\eval_status.py path\to\run-matrix
+python scripts\eval_status.py path\to\run-matrix --require-stage raw
+python scripts\eval_status.py path\to\run-matrix --require-stage metrics
+python scripts\eval_status.py path\to\run-matrix --require-stage reviewed
+```
+
+The default `prepared` gate confirms only the matrix and bundles. Later gates
+require all case runs to have non-empty raw answers, hash-linked automatic
+metrics, or two complete reviews plus validated adjudication. Missing artifacts
+remain missing; the checker never converts prepared work into completed runs.
+
 ## Modes to compare
 
 Run every trigger case in three modes:
@@ -191,6 +227,24 @@ python scripts\eval_review.py finalize path\to\adjudication.json `
 Finalization rechecks the two review hashes, recomputes the disagreement set,
 applies the resolutions, and validates all cross-field count relationships.
 Agreement counts are descriptive and must not be presented as model quality.
+
+## 2.4 evidence-release gate
+
+Do not publish a comparative benchmark claim or mark the repeated pilot
+complete until all of the following are true:
+
+1. the same identifiable model and declared source access were used across
+   compared modes;
+2. `validate-matrix` passes before and after execution;
+3. `eval_status.py --require-stage reviewed` passes for all 27 case runs;
+4. raw answers, automatic metric reports, both independent reviews,
+   adjudications, and final reviews are retained;
+5. schema-v2 result files pass `eval_results.py`; and
+6. `eval_compare.py` accepts the compared results without a fingerprint or
+   completed-case mismatch.
+
+If any condition is unavailable, report the pilot as incomplete or blocked.
+Infrastructure readiness alone is not evidence that one mode is better.
 
 Compare two or more completed results only when their model, prompt revision,
 source access, and completed case sets match:

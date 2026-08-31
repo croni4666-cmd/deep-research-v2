@@ -25,6 +25,10 @@
 - Added blinded two-reviewer sheets, strict artifact matching, field-level
   disagreement reports, explicit adjudication, and validated final-review
   reconstruction.
+- Added opaque per-run blind identifiers, a one-raw-answer-per-case artifact
+  protocol, and fail-closed prepared/raw/metrics/reviewed completion gates.
+- Documented the evidence-release gate so prepared infrastructure cannot be
+  mistaken for completed repeated pilots or comparative benchmark evidence.
 
 ## 2.3.0 - 2026-08-31
 
