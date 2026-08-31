@@ -14,6 +14,7 @@ else:
     from eval_results import validate_results
 
 FINGERPRINT_FIELDS = ("model", "prompt_revision", "source_access")
+V2_FINGERPRINT_FIELDS = ("suite_id", "repeat")
 
 
 def _issue(issues: list[dict[str, str]], code: str, path: str, message: str) -> None:
@@ -89,8 +90,19 @@ def compare_results(runs: list[Any], catalog: Any) -> dict[str, Any]:
             _issue(issues, "compare.duplicate_mode", "$.runs",
                    "Paired comparisons require one result per mode.")
         baseline = valid_runs[0]["run"]
+        baseline_schema = valid_runs[0].get("schema_version")
         for index, run in enumerate(valid_runs[1:], start=1):
-            for field in FINGERPRINT_FIELDS:
+            if run.get("schema_version") != baseline_schema:
+                _issue(
+                    issues,
+                    "compare.schema_mismatch",
+                    f"$.runs[{index}].schema_version",
+                    "Result schema version differs from the first run.",
+                )
+            fingerprint_fields = FINGERPRINT_FIELDS + (
+                V2_FINGERPRINT_FIELDS if baseline_schema == 2 else ()
+            )
+            for field in fingerprint_fields:
                 if run["run"].get(field) != baseline.get(field):
                     _issue(
                         issues,
@@ -114,10 +126,17 @@ def compare_results(runs: list[Any], catalog: Any) -> dict[str, Any]:
                 )
 
     summaries = [_aggregate(run) for run in valid_runs]
+    fingerprint_fields = FINGERPRINT_FIELDS + (
+        V2_FINGERPRINT_FIELDS
+        if valid_runs and valid_runs[0].get("schema_version") == 2 else ()
+    )
     fingerprint = {
         field: valid_runs[0]["run"].get(field) if valid_runs else None
-        for field in FINGERPRINT_FIELDS
+        for field in fingerprint_fields
     }
+    fingerprint["schema_version"] = (
+        valid_runs[0].get("schema_version") if valid_runs else None
+    )
     return {
         "verdict": "PASS" if not issues else "FAIL",
         "error_count": len(issues),

@@ -40,6 +40,16 @@
       "repeats": 3,
       "live_web": false,
       "source_access": "Only candidate sources in evals/fixtures/mirrored-evidence/sources; evaluator ground truth is excluded."
+    },
+    {
+      "id": "offline-regression-v1",
+      "title": "Offline evidence and output-structure regressions",
+      "purpose": "Repeat independence, current-release status, and duplicate-table traps without live-web variability.",
+      "case_ids": ["adversarial-mirrored-evidence", "adversarial-current-release-status", "adversarial-duplicate-table-row"],
+      "modes": ["builtin", "evidence", "combined"],
+      "repeats": 3,
+      "live_web": false,
+      "source_access": "Only each case's declared fixture candidate sources; evaluator ground truth is excluded."
     }
   ]
 }

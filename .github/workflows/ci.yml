@@ -29,5 +29,7 @@ jobs:
         run: python scripts/eval_suites.py evals/suites.json
       - name: Exercise evaluation-result validation
         run: python -m unittest tests.test_eval_results -v
+      - name: Exercise raw-output metric extraction
+        run: python -m unittest tests.test_eval_ingest -v
       - name: Smoke-test plan preview
         run: python scripts/plan_preview.py --topic "test topic" --json

@@ -12,6 +12,14 @@
   source-access, mode, or completed-case incompatibility.
 - Added regression tests for suite boundaries, bundle isolation, hashing, and
   comparison compatibility.
+- Added backward-compatible result schema v2 with suite/repeat linkage,
+  artifact hashes, automatic-check output, and per-metric provenance.
+- Extended fail-closed comparisons to reject mixed schema versions and v2
+  suite or repeat mismatches.
+- Added raw-answer ingestion for deterministic word, unique-link, and duplicate
+  Markdown-row measurements without making semantic quality judgments.
+- Added offline stale-release-status and duplicate-table-row fixtures plus a
+  repeated three-mode regression suite.
 
 ## 2.3.0 - 2026-08-31
 
