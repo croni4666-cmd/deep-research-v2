@@ -14,6 +14,7 @@ def evidence(source_id: str, group: str, url: str) -> dict:
         "publisher": "Example publisher",
         "published_at": "2026-08-01",
         "accessed_at": "2026-08-30",
+        "access": "full_text",
         "location": "Section 2",
         "excerpt": "The relevant inspected evidence.",
         "stance": "supports",
@@ -23,7 +24,7 @@ def evidence(source_id: str, group: str, url: str) -> dict:
 
 def valid_ledger() -> dict:
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "research_questions": [
             {"id": "RQ1", "question": "What is supported?", "status": "resolved"}
         ],
@@ -49,6 +50,8 @@ class EvidenceAuditTests(unittest.TestCase):
         result = audit_ledger(valid_ledger())
         self.assertEqual(result["verdict"], "PASS")
         self.assertEqual(result["error_count"], 0)
+        self.assertEqual(result["audit_scope"], "structural")
+        self.assertEqual(result["inspectable_evidence_count"], 2)
 
     def test_empty_claims_fail_closed(self) -> None:
         ledger = valid_ledger()
@@ -101,6 +104,26 @@ class EvidenceAuditTests(unittest.TestCase):
         ledger["claims"][0]["evidence"][0]["url"] = "not-a-url"
         result = audit_ledger(ledger)
         self.assertEqual(result["verdict"], "FAIL")
+
+    def test_metadata_only_material_cannot_support_claim(self) -> None:
+        ledger = copy.deepcopy(valid_ledger())
+        item = ledger["claims"][0]["evidence"][0]
+        item["access"] = "metadata_only"
+        item["access_note"] = "Only a registry record was inspectable."
+        result = audit_ledger(ledger)
+        self.assertEqual(result["verdict"], "FAIL")
+        self.assertIn(
+            "evidence.uninspectable_support", {issue["code"] for issue in result["issues"]}
+        )
+
+    def test_schema_one_remains_backward_compatible(self) -> None:
+        ledger = copy.deepcopy(valid_ledger())
+        ledger["schema_version"] = 1
+        for item in ledger["claims"][0]["evidence"]:
+            item.pop("access")
+        result = audit_ledger(ledger)
+        self.assertEqual(result["verdict"], "PASS")
+        self.assertEqual(result["legacy_unspecified_access_count"], 2)
 
 
 if __name__ == "__main__":

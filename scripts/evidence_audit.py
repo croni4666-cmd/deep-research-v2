@@ -18,6 +18,10 @@ IMPORTANCE_VALUES = {"key", "supporting"}
 CLAIM_STATUS_VALUES = {"verified", "qualified", "unresolved"}
 STANCE_VALUES = {"supports", "contradicts", "context"}
 QUESTION_STATUS_VALUES = {"resolved", "qualified", "unresolved", "excluded"}
+ACCESS_VALUES = {
+    "full_text", "partial_text", "metadata_only", "blocked", "secondary_substitute",
+}
+SUPPORTING_ACCESS_VALUES = {"full_text", "partial_text", "secondary_substitute"}
 
 
 def _issue(issues: list[dict[str, str]], severity: str, code: str,
@@ -63,9 +67,10 @@ def audit_ledger(data: Any, *, min_key_sources: int = 2,
                "The ledger must be a JSON object.")
         return _finish(issues, 0, 0, strict)
 
-    if data.get("schema_version") != 1:
+    schema_version = data.get("schema_version")
+    if schema_version not in {1, 2}:
         _issue(issues, "error", "ledger.schema_version", "$.schema_version",
-               "schema_version must be 1.")
+               "schema_version must be 1 or 2.")
 
     questions = data.get("research_questions", [])
     if not isinstance(questions, list):
@@ -110,6 +115,8 @@ def audit_ledger(data: Any, *, min_key_sources: int = 2,
 
     claim_ids: set[str] = set()
     evidence_count = 0
+    access_counts = {value: 0 for value in sorted(ACCESS_VALUES)}
+    legacy_access_count = 0
     for index, claim in enumerate(claims):
         path = f"$.claims[{index}]"
         if not isinstance(claim, dict):
@@ -159,10 +166,7 @@ def audit_ledger(data: Any, *, min_key_sources: int = 2,
                        "Each evidence item must be an object.")
                 continue
 
-            required_text = (
-                "source_id", "title", "publisher", "location", "excerpt",
-                "independence_group",
-            )
+            required_text = ("source_id", "title", "publisher", "independence_group")
             for field in required_text:
                 if not _nonempty_text(item.get(field)):
                     _issue(issues, "error", f"evidence.missing_{field}",
@@ -188,13 +192,43 @@ def audit_ledger(data: Any, *, min_key_sources: int = 2,
                        f"{item_path}.published_at",
                        "published_at must be empty or an ISO date (YYYY-MM-DD).")
 
+            access = item.get("access")
+            if schema_version == 2:
+                if access not in ACCESS_VALUES:
+                    _issue(issues, "error", "evidence.invalid_access",
+                           f"{item_path}.access",
+                           f"access must be one of {sorted(ACCESS_VALUES)}.")
+                else:
+                    access_counts[access] += 1
+                if access in SUPPORTING_ACCESS_VALUES:
+                    for field in ("location", "excerpt"):
+                        if not _nonempty_text(item.get(field)):
+                            _issue(issues, "error", f"evidence.missing_{field}",
+                                   f"{item_path}.{field}", f"{field} is required.")
+                elif access in {"metadata_only", "blocked"} and not _nonempty_text(
+                        item.get("access_note")):
+                    _issue(issues, "error", "evidence.missing_access_note",
+                           f"{item_path}.access_note",
+                           "metadata-only and blocked sources require an access_note.")
+            else:
+                legacy_access_count += 1
+                for field in ("location", "excerpt"):
+                    if not _nonempty_text(item.get(field)):
+                        _issue(issues, "error", f"evidence.missing_{field}",
+                               f"{item_path}.{field}", f"{field} is required.")
+
             stance = item.get("stance")
             if stance not in STANCE_VALUES:
                 _issue(issues, "error", "evidence.invalid_stance",
                        f"{item_path}.stance",
                        "stance must be supports, contradicts, or context.")
             elif stance == "supports" and _nonempty_text(item.get("independence_group")):
-                support_groups.add(item["independence_group"].strip())
+                if schema_version == 2 and access not in SUPPORTING_ACCESS_VALUES:
+                    _issue(issues, "error", "evidence.uninspectable_support",
+                           item_path,
+                           "Blocked or metadata-only material cannot support a claim.")
+                else:
+                    support_groups.add(item["independence_group"].strip())
             elif stance == "contradicts":
                 has_contradiction = True
 
@@ -213,7 +247,13 @@ def audit_ledger(data: Any, *, min_key_sources: int = 2,
             _issue(issues, "warning", "claim.unaddressed_contradiction", path,
                    "Contradictory evidence exists but no limitation or note addresses it.")
 
-    return _finish(issues, len(claims), evidence_count, strict)
+    result = _finish(issues, len(claims), evidence_count, strict)
+    result["access_counts"] = access_counts
+    result["inspectable_evidence_count"] = sum(
+        access_counts[value] for value in SUPPORTING_ACCESS_VALUES
+    )
+    result["legacy_unspecified_access_count"] = legacy_access_count
+    return result
 
 
 def _finish(issues: list[dict[str, str]], claim_count: int,
@@ -229,6 +269,7 @@ def _finish(issues: list[dict[str, str]], claim_count: int,
         "error_count": errors,
         "warning_count": warnings,
         "issues": issues,
+        "audit_scope": "structural",
         "scope_note": (
             "Structural audit only; factual correctness and citation entailment "
             "were not evaluated."
@@ -273,8 +314,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.json:
         print(json.dumps(result, indent=2, ensure_ascii=False))
     else:
+        label = "STRUCTURAL_PASS" if result["verdict"] == "PASS" else "STRUCTURAL_FAIL"
         print(
-            f"{result['verdict']}: {result['claim_count']} claims, "
+            f"{label}: {result['claim_count']} claims, "
             f"{result['evidence_count']} evidence items, "
             f"{result['error_count']} errors, {result['warning_count']} warnings"
         )
