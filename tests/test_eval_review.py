@@ -73,6 +73,18 @@ class EvalReviewTests(unittest.TestCase):
                     case_ids=["routing-simple-capital"], reviewed_on="2026-08-31",
                 )
 
+    def test_case_id_containing_mode_name_is_not_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            case_dir = Path(temporary) / "adversarial-mirrored-evidence"
+            case_dir.mkdir()
+            raw = case_dir / "raw.md"
+            raw.write_text("The mirrors are not independent.", encoding="utf-8")
+            review = prepare_review(
+                catalog=CATALOG, raw_path=raw, reviewer_id="reviewer-a",
+                case_ids=["adversarial-mirrored-evidence"], reviewed_on="2026-08-31",
+            )
+            self.assertEqual(validate_review(review, CATALOG)["verdict"], "PASS")
+
     def test_two_agreeing_independent_reviews_need_no_resolutions(self) -> None:
         left = completed_review("reviewer-a")
         right = completed_review("reviewer-b")

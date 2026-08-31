@@ -98,6 +98,21 @@ require all case runs to have non-empty raw answers, hash-linked automatic
 metrics, or two complete reviews plus validated adjudication. Missing artifacts
 remain missing; the checker never converts prepared work into completed runs.
 
+After the `reviewed` gate passes, materialize one schema-v2 result for every
+case run and one compatible three-mode comparison for every case and repeat:
+
+```powershell
+python scripts\eval_matrix_results.py path\to\run-matrix `
+  --output path\to\run-matrix-results
+```
+
+The command validates the complete hash-linked review chain before writing any
+output. It creates `individual/` results, `comparisons/` reports, and a
+descriptive `summary.json`. Existing output directories are never overwritten.
+If the matrix model string is unavailable, unknown, unspecified, or
+unidentified, the summary sets `release_claim_ready` to `false` and records a
+`model_identifier_unavailable` blocker even when every result validates.
+
 ## Modes to compare
 
 Run every trigger case in three modes:
@@ -179,13 +194,19 @@ Historical schema-v1 results remain valid. New schema-v2 results add:
 
 In schema v2, only `output_word_count` and `source_count` are automatically
 derived. All semantic quality fields remain explicitly human-reviewed.
+`source_count` is the number of unique HTTP(S) URLs printed in the answer; it
+is not the size of the evaluator-retained candidate `sources` array. Likewise,
+a human reviewer may inspect more primary sources than the answer prints as
+URLs. Validators keep those distinct measurements separate.
 
 ## Independent review and adjudication
 
 First give the frozen raw answer an anonymized path that does not contain
 `builtin`, `evidence`, or `combined`; the preparation command rejects paths
-that reveal the mode. Prepare two review sheets from that same anonymized raw
-answer. Reviewer IDs must be distinct:
+that reveal the mode. An exact catalog case-id path segment is exempt so a
+valid case such as `adversarial-mirrored-evidence` is not mistaken for a mode
+label. Prepare two review sheets from that same anonymized raw answer. Reviewer
+IDs must be distinct:
 
 ```powershell
 python scripts\eval_review.py prepare evals\raw\candidate-answer.md `
@@ -239,8 +260,9 @@ complete until all of the following are true:
 3. `eval_status.py --require-stage reviewed` passes for all 27 case runs;
 4. raw answers, automatic metric reports, both independent reviews,
    adjudications, and final reviews are retained;
-5. schema-v2 result files pass `eval_results.py`; and
-6. `eval_compare.py` accepts the compared results without a fingerprint or
+5. `eval_matrix_results.py` produces every expected case result and comparison;
+6. schema-v2 result files pass `eval_results.py`; and
+7. `eval_compare.py` accepts the compared results without a fingerprint or
    completed-case mismatch.
 
 If any condition is unavailable, report the pilot as incomplete or blocked.

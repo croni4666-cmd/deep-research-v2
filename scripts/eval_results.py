@@ -136,7 +136,6 @@ def _validate_metrics(
     metrics: Any,
     path: str,
     completed: bool,
-    source_count: int | None,
     issues: list[dict[str, str]],
 ) -> dict[str, int]:
     if not isinstance(metrics, dict):
@@ -158,12 +157,6 @@ def _validate_metrics(
     if completed and values.get("output_word_count", 0) == 0:
         _issue(issues, "case.empty_output_metric", f"{path}.output_word_count",
                "Completed cases must record a non-empty final answer.")
-    if source_count is not None and values.get("source_count", 0) < source_count:
-        _issue(issues, "case.source_count_mismatch", f"{path}.source_count",
-               "source_count cannot be smaller than the retained sources array length.")
-    if values.get("primary_source_count", 0) > values.get("source_count", 0):
-        _issue(issues, "case.primary_source_count_exceeds_sources", path,
-               "primary_source_count cannot exceed source_count.")
     if values.get("citation_sample_supported", 0) > values.get("citation_sample_size", 0):
         _issue(issues, "case.citation_sample_inconsistent", path,
                "citation_sample_supported cannot exceed citation_sample_size.")
@@ -276,7 +269,6 @@ def validate_results(data: Any, catalog: Any, *, allow_partial: bool = False) ->
         forbidden_avoided += scored - observed
 
         sources = result.get("sources")
-        case_source_count: int | None = len(sources) if isinstance(sources, list) else None
         if not isinstance(sources, list):
             _issue(issues, "case.sources_not_array", f"{path}.sources", "sources must be an array.")
         elif is_completed:
@@ -300,8 +292,7 @@ def validate_results(data: Any, catalog: Any, *, allow_partial: bool = False) ->
                     _issue(issues, "case.invalid_source_url", f"{source_path}.url",
                            "Source URLs must be absolute http or https URLs.")
         metrics = _validate_metrics(
-            result.get("metrics"), f"{path}.metrics", is_completed,
-            case_source_count, issues,
+            result.get("metrics"), f"{path}.metrics", is_completed, issues,
         )
         if schema_version == 2:
             _validate_metric_provenance(

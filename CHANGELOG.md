@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.4.1 - 2026-08-31
+
+- Added fail-closed materialization of reviewed matrices into 27 schema-v2
+  case results, nine same-repeat comparisons, and a descriptive mode summary.
+- Added an explicit release-claim blocker when the matrix model identifier is
+  unavailable, unknown, unspecified, or unidentified.
+- Fixed blinded path validation so exact catalog case IDs containing a mode
+  word do not produce false positives while actual candidate-mode labels still
+  fail.
+- Separated retained inspected sources and human primary-source counts from the
+  automatic count of URLs printed in an answer.
+- Added regression coverage for matrix result materialization and the two
+  source-count semantics discovered during the completed repeated pilot.
+
 ## 2.4.0 - 2026-08-31
 
 - Added versioned live, offline, routing, pilot, and repeated-run suite

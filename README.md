@@ -8,18 +8,17 @@ It uses the tools and model available in the active Codex runtime. Its optional
 Python helpers validate plan and evidence structure; they do not perform web
 research or prove factual correctness.
 
-## What changed in 2.4.0
+## What changed in 2.4.1
 
-- Versioned suites and hash-addressed run matrices make repeated evaluations
-  reproducible without claiming that prepared bundles are completed runs.
-- Result schema v2 links suites, repeats, raw artifacts, automatic measurements,
-  and human metric provenance while retaining schema-v1 compatibility.
-- Offline fixtures test copied evidence, stale release status, and duplicate
-  Markdown table rows without live-web variability.
-- Blinded two-reviewer sheets, explicit disagreement adjudication, and final
-  review reconstruction keep semantic quality judgments human and auditable.
-- Prepared, raw, measured, and reviewed completion gates prevent infrastructure
-  readiness from being presented as comparative benchmark evidence.
+- Reviewed matrices now materialize into validated schema-v2 case results,
+  same-repeat three-mode comparisons, and a descriptive mode summary.
+- Result generation fails closed on incomplete review chains, unexpected source
+  URLs, incompatible comparisons, existing output directories, and missing
+  model identity for release claims.
+- Blinded review paths may contain an exact catalog case ID such as
+  `adversarial-mirrored-evidence` without weakening mode-leak detection.
+- Retained evidence, reported URL counts, and human primary-source counts remain
+  separate measurements instead of being forced into false equality.
 
 ## Install in Codex
 
@@ -81,7 +80,7 @@ library.
 ```powershell
 python -m compileall -q scripts tests
 python -m unittest discover -s tests -v
-python scripts\release_check.py --expected-version 2.4.0
+python scripts\release_check.py --expected-version 2.4.1
 python <skill-creator-dir>\scripts\quick_validate.py .
 ```
 
@@ -104,8 +103,8 @@ revalidation, raw-output metric extraction, schema-v2 provenance, repeated
 offline regressions, independent-review adjudication, and fail-closed
 comparison commands. Matrix completion gates distinguish prepared bundles from
 retained raw, measured, and independently reviewed case runs. These helpers do
-not run a model, prove truth, or create benchmark scores without retained human
-review.
+not run a model or prove truth. The matrix result builder also blocks release
+claims when the actual model identifier is unavailable.
 
 ## Scope and limitations
 
