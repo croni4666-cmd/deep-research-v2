@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import re
+import secrets
 import subprocess
 import sys
 from datetime import UTC, datetime
@@ -307,6 +308,7 @@ def create_matrix(
     timestamp = created.strftime("%Y%m%dT%H%M%SZ")
     matrix_dir = _unique_directory(output_parent, f"{timestamp}-{suite_id}-matrix")
     bundles: list[dict[str, Any]] = []
+    blind_ids: set[str] = set()
     for repeat in range(1, suite["repeats"] + 1):
         for mode in suite["modes"]:
             bundle_dir, _ = create_bundle(
@@ -322,9 +324,14 @@ def create_matrix(
                 now=created,
             )
             manifest_path = bundle_dir / "manifest.json"
+            blind_id = ""
+            while not blind_id or blind_id in blind_ids:
+                blind_id = f"candidate-{secrets.token_hex(6)}"
+            blind_ids.add(blind_id)
             bundles.append({
                 "mode": mode,
                 "repeat": repeat,
+                "blind_id": blind_id,
                 "path": bundle_dir.relative_to(matrix_dir).as_posix(),
                 "manifest_sha256": _sha256_file(manifest_path),
             })
@@ -383,6 +390,7 @@ def validate_matrix(matrix_dir: Path, root: Path) -> dict[str, Any]:
         (mode, repeat) for mode in modes for repeat in range(1, repeats + 1)
     }
     combinations: set[tuple[Any, Any]] = set()
+    blind_ids: set[str] = set()
     checked = 0
     resolved_matrix = matrix_dir.resolve()
     for index, record in enumerate(bundles):
@@ -401,6 +409,17 @@ def validate_matrix(matrix_dir: Path, root: Path) -> dict[str, Any]:
         if combination in combinations:
             issue("matrix.duplicate_run", path, f"Duplicate run: {combination}")
         combinations.add(combination)
+        blind_id = record.get("blind_id")
+        if not isinstance(blind_id, str) or not re.fullmatch(
+            r"candidate-[0-9a-f]{12}", blind_id
+        ):
+            issue("matrix.invalid_blind_id", f"{path}.blind_id",
+                  "blind_id must be an opaque candidate identifier.")
+        elif blind_id in blind_ids:
+            issue("matrix.duplicate_blind_id", f"{path}.blind_id",
+                  f"Duplicate blind_id: {blind_id}")
+        else:
+            blind_ids.add(blind_id)
         relative = record.get("path")
         if not isinstance(relative, str) or not relative.strip():
             issue("matrix.invalid_path", f"{path}.path", "Bundle path is required.")

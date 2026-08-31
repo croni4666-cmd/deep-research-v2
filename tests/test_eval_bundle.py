@@ -108,6 +108,9 @@ class EvalBundleTests(unittest.TestCase):
                 now=datetime(2026, 8, 31, 2, 3, 4, tzinfo=UTC),
             )
             self.assertEqual(matrix["expected_run_count"], 9)
+            blind_ids = [item["blind_id"] for item in matrix["bundles"]]
+            self.assertEqual(len(blind_ids), len(set(blind_ids)))
+            self.assertTrue(all(value.startswith("candidate-") for value in blind_ids))
             self.assertEqual(
                 {(item["mode"], item["repeat"]) for item in matrix["bundles"]},
                 {

@@ -100,8 +100,10 @@ python scripts\eval_suites.py evals\suites.json
 See [`evals/README.md`](evals/README.md) for run-bundle creation, hash
 revalidation, raw-output metric extraction, schema-v2 provenance, repeated
 offline regressions, independent-review adjudication, and fail-closed
-comparison commands. These helpers do not run a model, prove truth, or create
-benchmark scores without retained human review.
+comparison commands. Matrix completion gates distinguish prepared bundles from
+retained raw, measured, and independently reviewed case runs. These helpers do
+not run a model, prove truth, or create benchmark scores without retained human
+review.
 
 ## Scope and limitations
 
