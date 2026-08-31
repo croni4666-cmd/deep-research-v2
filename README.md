@@ -8,18 +8,17 @@ It uses the tools and model available in the active runtime. Its optional
 Python helpers validate plan and evidence structure; they do not perform web
 research or prove factual correctness.
 
-## What changed in 2.6.1
+## What changed in 2.7.0
 
-- Optional runtime fields now default conservatively to `false`; the fields
-  needed to classify Skill loading and source inspection remain required.
-- Runtime output now says explicitly that it classifies supplied declarations
-  and performs no product probing or remote attestation.
-- A strict-valid example ledger demonstrates all five access states.
-- MiniMax package tests now execute the packaged classifier and audit helper,
-  while preserving the distinction between package conformance and real
-  MiniMax product integration.
-- Offline fixtures are labeled synthetic, and plan previews include source
-  requirements plus anticipated access risks.
+- Restored region-aware source routing as a compact, provenance-based reference.
+- Added a four-level transferability framework for moving evidence, policy, or
+  practice across populations, jurisdictions, organizations, and markets.
+- Added a vendor-neutral parallel research contract that activates only when
+  real subagent capability is declared and available.
+- Extended evidence ledgers with optional regional source roles and structured
+  transfer assessments.
+- Added three realistic evaluation cases and a seventh suite for these deeper
+  behaviors, without restoring simulated orchestration or fabricated scores.
 
 ## Install in Codex
 
@@ -45,7 +44,7 @@ Enable Skills in Mini-Agent and configure search/open tools or MCP separately.
 Loading a Skill does not itself provide web access. See
 [`compatibility/README.md`](compatibility/README.md) and the example Mini-Agent
 configuration. A Mavis session that cannot demonstrably load the Skill must be
-reported as protocol-only, not as a v2.6.1 run.
+reported as protocol-only, not as a v2.7.0 run.
 
 ## Use
 
@@ -94,7 +93,8 @@ available in that session:
   "search": true,
   "open_url": true,
   "read_local_files": true,
-  "mcp": true
+  "mcp": true,
+  "subagents": true
 }
 ```
 
@@ -103,6 +103,22 @@ result is `native`, `compatible`, or `protocol-only`; it describes execution
 conditions declared in the manifest, not detected capabilities or research
 quality. `write_local_files`, `shell`, `mcp`, and `subagents` may be omitted and
 default to `false`.
+
+## Portable research depth
+
+The core Skill loads deeper guidance only when the task needs it:
+
+- [`references/region-source-routing.md`](references/region-source-routing.md)
+  routes regional claims by provenance and claim type;
+- [`references/transferability.md`](references/transferability.md) separates
+  evidence strength from cross-context applicability;
+- [`references/parallel-research.md`](references/parallel-research.md) defines
+  worker, merge, and verifier contracts for runtimes with real subagents.
+
+`subagents: true` only marks parallel research as a candidate. Confirm that
+workers inherit the required search/open tools. Generated prompts, empty result
+objects, and multiple model opinions are not executed agents or independent
+evidence.
 
 ## Plan preview
 
@@ -123,7 +139,7 @@ library.
 ```powershell
 python -m compileall -q scripts tests
 python -m unittest discover -s tests -v
-python scripts\release_check.py --expected-version 2.6.1
+python scripts\release_check.py --expected-version 2.7.0
 python <skill-creator-dir>\scripts\quick_validate.py .
 ```
 

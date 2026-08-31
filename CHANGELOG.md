@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.7.0 - 2026-08-31
+
+- Restored region-aware source selection as a concise, provenance-based runtime
+  reference without language-as-authority shortcuts or brittle site lists.
+- Added a four-level cross-context transfer framework that separates evidence
+  strength from local applicability and requires adaptations for pilot or
+  adaptation recommendations.
+- Added a vendor-neutral parallel research contract that activates only for
+  declared, real subagent capability and never counts agent agreement as
+  independent evidence.
+- Extended runtime declarations with an explicit parallel-research candidate
+  signal and a reminder to verify inherited worker tools.
+- Added optional ledger fields for regional source roles, context metadata, and
+  audited transfer assessments.
+- Added three live evaluation cases and a `portable-depth-v1` suite covering
+  regional routing, policy transfer, and conditional parallel decomposition.
+- Added runtime-reference integrity checks. No simulated agent, DSPy,
+  Reflexion, red-team, or verifier implementation was restored.
+
 ## 2.6.1 - 2026-08-31
 
 - Made non-classifying runtime fields optional with conservative `false`

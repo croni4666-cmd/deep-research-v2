@@ -20,6 +20,14 @@ class EvalCatalogTests(unittest.TestCase):
         self.assertEqual(result["verdict"], "PASS", result["issues"])
         self.assertGreaterEqual(result["summary"]["case_count"], 15)
 
+    def test_portable_depth_cases_are_retained(self) -> None:
+        case_ids = {case["id"] for case in load_catalog()["cases"]}
+        self.assertTrue({
+            "policy-cross-context-transfer",
+            "market-local-language-routing",
+            "technical-parallel-decomposition",
+        } <= case_ids)
+
     def test_duplicate_case_id_fails(self) -> None:
         catalog = load_catalog()
         duplicate = copy.deepcopy(catalog["cases"][0])

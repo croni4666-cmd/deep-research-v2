@@ -35,3 +35,7 @@ An end-to-end MiniMax claim requires a retained run record showing:
 `runtime_check.py` only classifies the supplied declaration. It performs no
 runtime discovery or remote attestation. Do not describe raw HTTP calls or a
 copy into a Codex Skills directory as a MiniMax integration test.
+
+When the declaration includes `subagents: true`, the classifier may mark the
+runtime as a parallel-research candidate. This is not proof that workers inherit
+search/open tools; verify that in the retained product run before dispatching.

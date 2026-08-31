@@ -162,6 +162,40 @@ class EvidenceAuditTests(unittest.TestCase):
                     "evidence.invalid_access", {issue["code"] for issue in result["issues"]}
                 )
 
+    def test_invalid_optional_source_role_fails(self) -> None:
+        ledger = copy.deepcopy(valid_ledger())
+        ledger["claims"][0]["evidence"][0]["source_role"] = "local_language"
+        result = audit_ledger(ledger)
+        self.assertIn(
+            "evidence.invalid_source_role", {issue["code"] for issue in result["issues"]}
+        )
+
+    def test_transfer_assessment_requires_adaptation_for_pilot(self) -> None:
+        ledger = copy.deepcopy(valid_ledger())
+        ledger["claims"][0]["transfer_assessment"] = {
+            "source_context": "Region A",
+            "target_context": "Region B",
+            "level": "pilot_only",
+            "rationale": "Local effects remain uncertain.",
+            "adaptations": [],
+        }
+        result = audit_ledger(ledger)
+        self.assertIn(
+            "transfer.missing_adaptations", {issue["code"] for issue in result["issues"]}
+        )
+
+    def test_valid_transfer_assessment_passes(self) -> None:
+        ledger = copy.deepcopy(valid_ledger())
+        ledger["claims"][0]["transfer_assessment"] = {
+            "source_context": "Region A",
+            "target_context": "Region B",
+            "level": "adaptation_required",
+            "rationale": "The legal implementation mechanism differs.",
+            "adaptations": ["Use the target jurisdiction's enforcement process."],
+        }
+        result = audit_ledger(ledger)
+        self.assertEqual(result["verdict"], "PASS", result["issues"])
+
 
 if __name__ == "__main__":
     unittest.main()

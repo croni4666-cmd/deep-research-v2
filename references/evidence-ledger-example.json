@@ -13,6 +13,15 @@
       "claim": "Two independent inspected records report the bounded result.",
       "importance": "key",
       "status": "verified",
+      "transfer_assessment": {
+        "source_context": "Example Region A",
+        "target_context": "Example Region B",
+        "level": "pilot_only",
+        "rationale": "The mechanism is plausible, but target-context effects remain uncertain.",
+        "adaptations": [
+          "Run a bounded target-context pilot with predefined success and stop criteria."
+        ]
+      },
       "evidence": [
         {
           "source_id": "S1",
@@ -22,6 +31,9 @@
           "published_at": "2026-08-01",
           "accessed_at": "2026-08-31",
           "access": "full_text",
+          "source_role": "local_primary",
+          "geography": "Example Region B",
+          "language": "en",
           "location": "Table 2, row 4",
           "excerpt": "The inspected table reports the bounded result.",
           "stance": "supports",
@@ -35,6 +47,10 @@
           "published_at": "2026-08-10",
           "accessed_at": "2026-08-31",
           "access": "partial_text",
+          "source_role": "external_primary",
+          "geography": "Example Region A",
+          "population": "Adults in the original study population",
+          "language": "en",
           "location": "Results section, paragraph 3",
           "excerpt": "The accessible results passage independently reports the result.",
           "stance": "supports",
@@ -48,6 +64,7 @@
           "published_at": "2026-08-02",
           "accessed_at": "2026-08-31",
           "access": "metadata_only",
+          "source_role": "external_primary",
           "access_note": "Only title, identifier, sponsor, and dates were inspectable.",
           "stance": "context",
           "independence_group": "record:registry-2026"
@@ -60,6 +77,7 @@
           "published_at": "2026-08-03",
           "accessed_at": "2026-08-31",
           "access": "blocked",
+          "source_role": "external_primary",
           "access_note": "The host returned an access-denied response; content was not inspected.",
           "stance": "context",
           "independence_group": "publication:blocked-2026"
@@ -72,6 +90,7 @@
           "published_at": "2026-08-15",
           "accessed_at": "2026-08-31",
           "access": "secondary_substitute",
+          "source_role": "high_quality_synthesis",
           "location": "Discussion, paragraph 2",
           "excerpt": "The secondary analysis provides context but is not primary evidence.",
           "stance": "context",
