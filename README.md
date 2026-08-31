@@ -83,8 +83,8 @@ python -m unittest discover -s tests -v
 python <skill-creator-dir>\scripts\quick_validate.py .
 ```
 
-GitHub Actions runs compilation, adversarial tests, and a CLI smoke test on
-Python 3.12 and 3.13.
+GitHub Actions runs compilation, adversarial tests, catalog and suite
+validation, and a CLI smoke test on Python 3.12 and 3.13.
 
 ## Forward evaluation
 
@@ -94,10 +94,12 @@ its schema and coverage with:
 
 ```powershell
 python scripts\eval_catalog.py evals\cases.json --strict
+python scripts\eval_suites.py evals\suites.json
 ```
 
-See [`evals/README.md`](evals/README.md) for the comparison protocol. Catalog
-validation does not run a model or create benchmark scores.
+See [`evals/README.md`](evals/README.md) for run-bundle creation, hash
+revalidation, and fail-closed comparison commands. These helpers do not run a
+model, prove truth, or create benchmark scores without retained human review.
 
 ## Scope and limitations
 

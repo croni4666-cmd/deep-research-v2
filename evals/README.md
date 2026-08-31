@@ -4,6 +4,35 @@
 the Skill. It is deliberately separate from `SKILL.md` so evaluation detail
 does not increase runtime context or alter research behavior.
 
+`suites.json` selects versioned groups of cases, allowed modes, repeat counts,
+source-access policy, and whether live web access is permitted. Validate it
+before preparing runs:
+
+```powershell
+python scripts\eval_suites.py
+```
+
+Prepare a collision-safe run bundle in a user-authorized output directory:
+
+```powershell
+python scripts\eval_bundle.py create `
+  --suite offline-independence-v1 `
+  --mode evidence `
+  --model gpt-example `
+  --repeat 1 `
+  --output path\to\run-bundles
+```
+
+The bundle records prompts, source policy, the skill commit, and SHA-256 hashes
+for declared inputs and candidate fixture files. It excludes evaluator-only
+ground truth and does not run or score a model.
+
+Revalidate the prepared bytes before and after a candidate run:
+
+```powershell
+python scripts\eval_bundle.py validate path\to\run-bundle
+```
+
 ## Modes to compare
 
 Run every trigger case in three modes:
@@ -40,9 +69,10 @@ For each case and mode, record:
 Completed cases also use a `metrics` object. Counts are deliberately simple
 and reviewable: final-answer words, sources reported in the raw answer, primary
 sources, sampled citations and supported samples, unsupported claims found in
-that sample, and key claims classified as supported or unresolved. These metrics distinguish
-answers that satisfy the same safety rubric but differ materially in coverage,
-precision, and reading cost. They are not a single composite quality score.
+that sample, and key claims classified as supported or unresolved. These
+metrics distinguish answers that satisfy the same safety rubric but differ
+materially in coverage, precision, and reading cost. They are not a single
+composite quality score.
 
 Raw candidate responses belong in `evals/raw/`. Freeze them before exposing
 the candidate runner to catalog expectations or evaluator-only ground truth.
@@ -60,6 +90,17 @@ python scripts\eval_results.py path\to\result.json --allow-partial
 `--allow-partial` is required for a pilot that intentionally runs only part of
 the catalog. Validation checks structure and catalog consistency; it does not
 turn reviewer judgments into objective quality measurements.
+
+Compare two or more completed results only when their model, prompt revision,
+source access, and completed case sets match:
+
+```powershell
+python scripts\eval_compare.py result-builtin.json result-evidence.json
+```
+
+The comparison command fails closed on mismatched fingerprints. It reports
+behavior judgments, citation samples, unsupported claims, answer length, and
+source count separately; it does not emit an opaque winner score.
 
 ## Catalog validation
 

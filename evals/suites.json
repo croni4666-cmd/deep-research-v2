@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "suites": [
+    {
+      "id": "pilot-v1",
+      "title": "Initial policy, independence, and routing pilot",
+      "purpose": "Reproduce the first blinded comparison with one live policy case, one offline adversarial fixture, and one routing case.",
+      "case_ids": ["policy-semiconductor-current", "adversarial-mirrored-evidence", "routing-simple-capital"],
+      "modes": ["builtin", "evidence", "combined"],
+      "repeats": 1,
+      "live_web": true,
+      "source_access": "Live web for the policy case; fixture candidate sources only for mirrored evidence; no research tools for routing."
+    },
+    {
+      "id": "round-2-v1",
+      "title": "Market, medical, academic, and technical pilot",
+      "purpose": "Repeat the second blinded comparison across four research categories and underspecified prompts.",
+      "case_ids": ["market-ev-forecast-conflict", "medical-screening-high-stakes", "academic-literature-methods", "technical-library-current"],
+      "modes": ["builtin", "evidence", "combined"],
+      "repeats": 1,
+      "live_web": true,
+      "source_access": "Live web with primary and official sources preferred."
+    },
+    {
+      "id": "routing-smoke-v1",
+      "title": "Non-trigger routing smoke suite",
+      "purpose": "Verify that quick facts, rewriting, and deterministic arithmetic do not start a deep-research workflow.",
+      "case_ids": ["routing-simple-capital", "routing-email-rewrite", "routing-local-arithmetic"],
+      "modes": ["evidence"],
+      "repeats": 1,
+      "live_web": false,
+      "source_access": "No external sources or research tools."
+    },
+    {
+      "id": "offline-independence-v1",
+      "title": "Offline copied-evidence regression",
+      "purpose": "Repeat the mirrored-evidence trap without live-web variability.",
+      "case_ids": ["adversarial-mirrored-evidence"],
+      "modes": ["builtin", "evidence", "combined"],
+      "repeats": 3,
+      "live_web": false,
+      "source_access": "Only candidate sources in evals/fixtures/mirrored-evidence/sources; evaluator ground truth is excluded."
+    }
+  ]
+}

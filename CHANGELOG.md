@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.4.0 - Unreleased
+
+- Added versioned live, offline, routing, pilot, and repeated-run suite
+  manifests with validation against the case catalog.
+- Added collision-safe run-bundle creation with prompt, skill, catalog, suite,
+  and candidate-fixture hashes while excluding evaluator ground truth.
+- Added bundle revalidation that detects prompt, skill, catalog, suite, and
+  candidate-fixture drift before comparison.
+- Added fail-closed paired comparison reports that reject model, prompt,
+  source-access, mode, or completed-case incompatibility.
+- Added regression tests for suite boundaries, bundle isolation, hashing, and
+  comparison compatibility.
+
 ## 2.3.0 - 2026-08-31
 
 - Added a versioned catalog of realistic trigger, routing, high-risk, and
