@@ -8,10 +8,9 @@ import sys
 from pathlib import Path
 from typing import Any
 
-BOOLEAN_FIELDS = (
-    "skill_loaded", "search", "open_url", "read_local_files",
-    "write_local_files", "shell", "mcp", "subagents",
-)
+REQUIRED_BOOLEAN_FIELDS = ("skill_loaded", "search", "open_url", "read_local_files")
+OPTIONAL_BOOLEAN_FIELDS = ("write_local_files", "shell", "mcp", "subagents")
+BOOLEAN_FIELDS = REQUIRED_BOOLEAN_FIELDS + OPTIONAL_BOOLEAN_FIELDS
 
 
 def classify_runtime(data: Any) -> dict[str, Any]:
@@ -24,19 +23,24 @@ def classify_runtime(data: Any) -> dict[str, Any]:
         errors.append("schema_version must be 1")
     if not isinstance(data.get("runtime"), str) or not data["runtime"].strip():
         errors.append("runtime must be a non-empty string")
-    for field in BOOLEAN_FIELDS:
+    for field in REQUIRED_BOOLEAN_FIELDS:
         if not isinstance(data.get(field), bool):
             errors.append(f"{field} must be a boolean")
+    for field in OPTIONAL_BOOLEAN_FIELDS:
+        if field in data and not isinstance(data[field], bool):
+            errors.append(f"{field} must be a boolean when provided")
     if errors:
         return {"verdict": "FAIL", "profile": "invalid", "errors": errors}
 
-    if data["skill_loaded"] and data["search"] and data["open_url"]:
+    capabilities = {field: data.get(field, False) for field in BOOLEAN_FIELDS}
+
+    if capabilities["skill_loaded"] and capabilities["search"] and capabilities["open_url"]:
         profile = "native"
         limitation = None
-    elif data["skill_loaded"] and data["open_url"]:
+    elif capabilities["skill_loaded"] and capabilities["open_url"]:
         profile = "compatible"
         limitation = "Source discovery is constrained; use supplied or known sources."
-    elif data["skill_loaded"] and data["read_local_files"]:
+    elif capabilities["skill_loaded"] and capabilities["read_local_files"]:
         profile = "compatible"
         limitation = "Offline sources only; do not claim live-web coverage."
     else:
@@ -47,8 +51,12 @@ def classify_runtime(data: Any) -> dict[str, Any]:
         "profile": profile,
         "runtime": data["runtime"].strip(),
         "model_identifier": data.get("model_identifier"),
+        "classification_basis": (
+            "Declared manifest values only; no runtime capability probing was performed."
+        ),
+        "capabilities": capabilities,
         "limitation": limitation,
-        "optional_helpers_available": data["read_local_files"] and data["shell"],
+        "optional_helpers_available": capabilities["read_local_files"] and capabilities["shell"],
         "errors": [],
     }
 

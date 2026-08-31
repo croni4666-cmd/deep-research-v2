@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import copy
+import json
 import unittest
+from pathlib import Path
 
 from scripts.evidence_audit import audit_ledger
+
+ROOT = Path(__file__).parents[1]
 
 
 def evidence(source_id: str, group: str, url: str) -> dict:
@@ -124,6 +128,39 @@ class EvidenceAuditTests(unittest.TestCase):
         result = audit_ledger(ledger)
         self.assertEqual(result["verdict"], "PASS")
         self.assertEqual(result["legacy_unspecified_access_count"], 2)
+
+    def test_complete_access_state_example_passes_strict(self) -> None:
+        path = ROOT / "references" / "evidence-ledger-example.json"
+        ledger = json.loads(path.read_text(encoding="utf-8"))
+        result = audit_ledger(ledger, strict=True)
+        self.assertEqual(result["verdict"], "PASS", result["issues"])
+        self.assertEqual(
+            result["access_counts"],
+            {
+                "blocked": 1,
+                "full_text": 1,
+                "metadata_only": 1,
+                "partial_text": 1,
+                "secondary_substitute": 1,
+            },
+        )
+
+    def test_every_access_state_is_accepted_when_used_legally(self) -> None:
+        for access in (
+            "full_text", "partial_text", "metadata_only", "blocked",
+            "secondary_substitute",
+        ):
+            with self.subTest(access=access):
+                ledger = copy.deepcopy(valid_ledger())
+                item = ledger["claims"][0]["evidence"][0]
+                item["access"] = access
+                if access in {"metadata_only", "blocked"}:
+                    item["stance"] = "context"
+                    item["access_note"] = "Content was not inspectable."
+                result = audit_ledger(ledger)
+                self.assertNotIn(
+                    "evidence.invalid_access", {issue["code"] for issue in result["issues"]}
+                )
 
 
 if __name__ == "__main__":

@@ -28,7 +28,28 @@ class RuntimeCheckTests(unittest.TestCase):
 
     def test_missing_boolean_fails(self) -> None:
         data = manifest()
-        data.pop("mcp")
+        data.pop("open_url")
+        result = classify_runtime(data)
+        self.assertEqual(result["verdict"], "FAIL")
+
+    def test_optional_fields_default_false(self) -> None:
+        data = {
+            "schema_version": 1,
+            "runtime": "minimal-runtime",
+            "skill_loaded": True,
+            "search": True,
+            "open_url": True,
+            "read_local_files": False,
+        }
+        result = classify_runtime(data)
+        self.assertEqual(result["profile"], "native")
+        self.assertFalse(result["capabilities"]["mcp"])
+        self.assertFalse(result["capabilities"]["subagents"])
+        self.assertIn("no runtime capability probing", result["classification_basis"])
+
+    def test_invalid_optional_field_fails(self) -> None:
+        data = manifest()
+        data["mcp"] = "unknown"
         result = classify_runtime(data)
         self.assertEqual(result["verdict"], "FAIL")
 

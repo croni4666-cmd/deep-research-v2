@@ -7,7 +7,7 @@ description: >-
   competitive, or trend research. Do not use for quick factual lookups or
   requests that do not benefit from a multi-source research workflow.
 metadata:
-  version: 2.6.0
+  version: 2.6.1
   author: croni4666-cmd
 ---
 

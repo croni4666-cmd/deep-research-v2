@@ -8,17 +8,18 @@ It uses the tools and model available in the active runtime. Its optional
 Python helpers validate plan and evidence structure; they do not perform web
 research or prove factual correctness.
 
-## What changed in 2.6.0
+## What changed in 2.6.1
 
-- Added explicit native, compatible, and protocol-only runtime profiles so a
-  prompt simulation cannot be reported as a real Skill run.
-- Added a platform-neutral MiniMax Mini-Agent packaging path without introducing
-  a LangChain or vendor SDK dependency.
-- Evidence-ledger schema v2 records full, partial, metadata-only, blocked, and
-  secondary-substitute access; uninspectable material cannot support a claim.
-- Added publisher, registry/API, government-link-drift, and dynamic-page fallback
-  guidance plus deterministic runtime and package checks.
-- CI now revalidates every archived JSON evaluation result.
+- Optional runtime fields now default conservatively to `false`; the fields
+  needed to classify Skill loading and source inspection remain required.
+- Runtime output now says explicitly that it classifies supplied declarations
+  and performs no product probing or remote attestation.
+- A strict-valid example ledger demonstrates all five access states.
+- MiniMax package tests now execute the packaged classifier and audit helper,
+  while preserving the distinction between package conformance and real
+  MiniMax product integration.
+- Offline fixtures are labeled synthetic, and plan previews include source
+  requirements plus anticipated access risks.
 
 ## Install in Codex
 
@@ -44,7 +45,7 @@ Enable Skills in Mini-Agent and configure search/open tools or MCP separately.
 Loading a Skill does not itself provide web access. See
 [`compatibility/README.md`](compatibility/README.md) and the example Mini-Agent
 configuration. A Mavis session that cannot demonstrably load the Skill must be
-reported as protocol-only, not as a v2.6.0 run.
+reported as protocol-only, not as a v2.6.1 run.
 
 ## Use
 
@@ -75,6 +76,9 @@ The first output label is `STRUCTURAL_PASS` or `STRUCTURAL_FAIL`. Exit codes:
 
 Passing means the ledger satisfies deterministic traceability rules. It does
 not mean the claims are true or that the citations entail them.
+The complete synthetic example at
+[`references/evidence-ledger-example.json`](references/evidence-ledger-example.json)
+contains every supported access state.
 
 ## Runtime capability check
 
@@ -90,16 +94,15 @@ available in that session:
   "search": true,
   "open_url": true,
   "read_local_files": true,
-  "write_local_files": true,
-  "shell": true,
-  "mcp": true,
-  "subagents": false
+  "mcp": true
 }
 ```
 
 Save this as JSON and run `python scripts/runtime_check.py manifest.json`. The
 result is `native`, `compatible`, or `protocol-only`; it describes execution
-conditions, not research quality.
+conditions declared in the manifest, not detected capabilities or research
+quality. `write_local_files`, `shell`, `mcp`, and `subagents` may be omitted and
+default to `false`.
 
 ## Plan preview
 
@@ -120,7 +123,7 @@ library.
 ```powershell
 python -m compileall -q scripts tests
 python -m unittest discover -s tests -v
-python scripts\release_check.py --expected-version 2.6.0
+python scripts\release_check.py --expected-version 2.6.1
 python <skill-creator-dir>\scripts\quick_validate.py .
 ```
 

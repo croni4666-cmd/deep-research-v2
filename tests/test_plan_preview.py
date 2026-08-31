@@ -15,6 +15,8 @@ class PlanPreviewTests(unittest.TestCase):
         self.assertEqual(plan.status, "plan_only")
         self.assertFalse(plan.verified)
         self.assertIn("no research performed", render_markdown(plan))
+        self.assertIn("Metadata-only", render_markdown(plan))
+        self.assertTrue(plan.source_requirements)
 
     def test_depth_is_bounded(self) -> None:
         with self.assertRaises(ValueError):

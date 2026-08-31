@@ -1,0 +1,87 @@
+{
+  "schema_version": 2,
+  "research_questions": [
+    {
+      "id": "RQ1",
+      "question": "What can the inspected records support?",
+      "status": "resolved"
+    }
+  ],
+  "claims": [
+    {
+      "id": "C1",
+      "claim": "Two independent inspected records report the bounded result.",
+      "importance": "key",
+      "status": "verified",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "url": "https://primary.example/source",
+          "title": "Canonical primary record",
+          "publisher": "Example Authority",
+          "published_at": "2026-08-01",
+          "accessed_at": "2026-08-31",
+          "access": "full_text",
+          "location": "Table 2, row 4",
+          "excerpt": "The inspected table reports the bounded result.",
+          "stance": "supports",
+          "independence_group": "dataset:primary-2026"
+        },
+        {
+          "source_id": "S2",
+          "url": "https://independent.example/report",
+          "title": "Independent report excerpt",
+          "publisher": "Independent Example Institute",
+          "published_at": "2026-08-10",
+          "accessed_at": "2026-08-31",
+          "access": "partial_text",
+          "location": "Results section, paragraph 3",
+          "excerpt": "The accessible results passage independently reports the result.",
+          "stance": "supports",
+          "independence_group": "study:independent-2026"
+        },
+        {
+          "source_id": "S3",
+          "url": "https://registry.example/record",
+          "title": "Registry metadata record",
+          "publisher": "Example Registry",
+          "published_at": "2026-08-02",
+          "accessed_at": "2026-08-31",
+          "access": "metadata_only",
+          "access_note": "Only title, identifier, sponsor, and dates were inspectable.",
+          "stance": "context",
+          "independence_group": "record:registry-2026"
+        },
+        {
+          "source_id": "S4",
+          "url": "https://publisher.example/blocked",
+          "title": "Blocked publisher page",
+          "publisher": "Example Publisher",
+          "published_at": "2026-08-03",
+          "accessed_at": "2026-08-31",
+          "access": "blocked",
+          "access_note": "The host returned an access-denied response; content was not inspected.",
+          "stance": "context",
+          "independence_group": "publication:blocked-2026"
+        },
+        {
+          "source_id": "S5",
+          "url": "https://secondary.example/analysis",
+          "title": "Secondary analysis",
+          "publisher": "Example Review",
+          "published_at": "2026-08-15",
+          "accessed_at": "2026-08-31",
+          "access": "secondary_substitute",
+          "location": "Discussion, paragraph 2",
+          "excerpt": "The secondary analysis provides context but is not primary evidence.",
+          "stance": "context",
+          "independence_group": "analysis:secondary-2026"
+        }
+      ],
+      "limitations": [
+        "The metadata-only, blocked, and secondary items are not counted as independent support."
+      ],
+      "notes": "This synthetic file demonstrates every schema-v2 access state."
+    }
+  ]
+}
