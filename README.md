@@ -8,17 +8,14 @@ It uses the tools and model available in the active runtime. Its optional
 Python helpers validate plan and evidence structure; they do not perform web
 research or prove factual correctness.
 
-## What changed in 2.7.1
+## What changed in 2.7.2
 
-- Restored the separate four-state cross-country wording guard for problems not
-  observed in the target, mechanisms to avoid copying, similar problems at a
-  different degree, and positive lesson candidates.
-- Kept that descriptive bias control separate from the four transferability
-  decision levels introduced in 2.7.0.
-- Made the plan-first gate unambiguous: broad or costly research pauses for the
-  user's conversational approval; previews and saved files are not approval.
-- Renamed offline test material “fictional synthetic fixtures” and added audited
-  comparative-status values plus dedicated evaluation cases.
+- Added an optional JSON plan record for long, multi-session, multi-worker, or
+  audit-sensitive research.
+- Kept approval in a separate receipt bound to the exact SHA-256 plan hash;
+  creating a plan still does not count as user approval.
+- Added fail-closed verification that marks approval stale after plan drift,
+  plus package smoke tests and an adversarial evaluation case.
 
 ## Install in Codex
 
@@ -44,7 +41,7 @@ Enable Skills in Mini-Agent and configure search/open tools or MCP separately.
 Loading a Skill does not itself provide web access. See
 [`compatibility/README.md`](compatibility/README.md) and the example Mini-Agent
 configuration. A Mavis session that cannot demonstrably load the Skill must be
-reported as protocol-only, not as a v2.7.1 run.
+reported as protocol-only, not as a v2.7.2 run.
 
 ## Use
 
@@ -127,7 +124,7 @@ For broad, costly, or materially ambiguous work, the plan must be shown in the
 conversation and research must pause until the user approves it. Running
 `plan_preview.py` or saving a plan file does not count as approval.
 
-## Plan preview
+## Plan preview and auditable approval
 
 Preview a bounded plan without launching research:
 
@@ -138,6 +135,20 @@ python scripts\plan_preview.py --topic "Your topic" --region CN --depth 3
 The helper prints to standard output by default. When `--out` is used, it
 refuses to replace an existing file unless `--force` is explicitly supplied.
 
+For work that spans sessions or workers, or requires an audit trail, use a plan
+record and a separate approval receipt:
+
+```powershell
+python scripts\plan_record.py create --topic "Your topic" --region CN --depth 3 --out research-plan.json
+python scripts\plan_record.py approve research-plan.json --approval-reference "conversation: user approved displayed plan"
+python scripts\plan_record.py verify research-plan.json
+```
+
+Run `approve` only after explicit user approval. Verification returns
+`APPROVED_CURRENT` only when the receipt matches the current plan hash. It
+returns `NOT_APPROVED_CURRENT` if approval is missing, stale, or the plan was
+changed. See [`references/plan-artifact.md`](references/plan-artifact.md).
+
 ## Development
 
 Requirements: Python 3.12 or newer; runtime helpers use only the standard
@@ -146,7 +157,7 @@ library.
 ```powershell
 python -m compileall -q scripts tests
 python -m unittest discover -s tests -v
-python scripts\release_check.py --expected-version 2.7.1
+python scripts\release_check.py --expected-version 2.7.2
 python <skill-creator-dir>\scripts\quick_validate.py .
 ```
 

@@ -18,10 +18,11 @@ class PackageSkillTests(unittest.TestCase):
             destination = package_skill(ROOT, Path(temporary), "minimax")
             manifest = json.loads((destination / "PACKAGE.json").read_text())
             self.assertEqual(manifest["target"], "minimax")
-            self.assertEqual(manifest["version"], "2.7.1")
+            self.assertEqual(manifest["version"], "2.7.2")
             self.assertTrue((destination / "SKILL.md").is_file())
             self.assertTrue((destination / "references" / "source-access.md").is_file())
             self.assertTrue((destination / "scripts" / "runtime_check.py").is_file())
+            self.assertTrue((destination / "scripts" / "plan_record.py").is_file())
             self.assertTrue(
                 (destination / "references" / "parallel-research.md").is_file()
             )
@@ -75,6 +76,36 @@ class PackageSkillTests(unittest.TestCase):
             )
             self.assertEqual(audit.returncode, 0, audit.stderr)
             self.assertIn("STRUCTURAL_PASS", audit.stdout)
+
+            plan = output / "research-plan.json"
+            create = subprocess.run(
+                [sys.executable, str(destination / "scripts" / "plan_record.py"),
+                 "create", "--topic", "package smoke test", "--out", str(plan)],
+                cwd=destination,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(create.returncode, 0, create.stderr)
+            approve = subprocess.run(
+                [sys.executable, str(destination / "scripts" / "plan_record.py"),
+                 "approve", str(plan), "--approval-reference", "test approval"],
+                cwd=destination,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(approve.returncode, 0, approve.stderr)
+            verify = subprocess.run(
+                [sys.executable, str(destination / "scripts" / "plan_record.py"),
+                 "verify", str(plan)],
+                cwd=destination,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(verify.returncode, 0, verify.stdout + verify.stderr)
+            self.assertIn("APPROVED_CURRENT", verify.stdout)
 
 
 if __name__ == "__main__":

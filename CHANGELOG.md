@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.7.2 - 2026-09-01
+
+- Added an optional auditable plan record for long, multi-session,
+  multi-worker, materially costly, or audit-sensitive research.
+- Separated the immutable plan fingerprint from its approval receipt so a
+  generated file cannot represent itself as user approved.
+- Added a standard-library helper that creates collision-safe plan records,
+  records an operator reference only after actual user approval, and verifies
+  the receipt against the exact SHA-256 plan hash.
+- Made plan drift fail closed: changed content or a changed hash invalidates the
+  old receipt and requires the revised plan to be shown and approved again.
+- Included the helper in Codex and MiniMax packages with end-to-end smoke tests,
+  unit tests, documentation, and an adversarial approval-drift evaluation case.
+
 ## 2.7.1 - 2026-09-01
 
 - Restored the distinct four-state cross-country framing guard for target-not-

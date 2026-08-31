@@ -7,7 +7,7 @@ description: >-
   competitive, or trend research. Do not use for quick factual lookups or
   requests that do not benefit from a multi-source research workflow.
 metadata:
-  version: 2.7.1
+  version: 2.7.2
   author: croni4666-cmd
 ---
 
@@ -48,6 +48,8 @@ does not imply that every answer must be long.
 5. Create 3-7 non-overlapping research questions and stopping conditions using
    [steps/3_analysis.md](steps/3_analysis.md). For broad or costly research,
    present the plan and wait for approval unless the user already approved it.
+   Use the optional auditable plan artifact routed from that step for long,
+   multi-session, multi-worker, or audit-sensitive work.
    When at least three questions can be investigated independently and the
    runtime actually exposes subagents, read
    [references/parallel-research.md](references/parallel-research.md).
@@ -99,6 +101,8 @@ The helpers validate structure and process invariants; they do not prove that a
 claim is true or that a citation entails it.
 
 - `scripts/plan_preview.py`: create a collision-safe research plan preview.
+- `scripts/plan_record.py`: bind an explicit approval receipt to the exact hash
+  of a reusable plan and detect later plan drift.
 - `scripts/evidence_audit.py`: validate a structured evidence ledger and fail
   closed on missing claims, missing evidence, or false independence.
 - `scripts/runtime_check.py`: classify a declared runtime capability manifest

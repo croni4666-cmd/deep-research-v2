@@ -11,7 +11,7 @@ from pathlib import Path
 TARGETS = {"codex", "minimax"}
 FILES = ("SKILL.md", "LICENSE")
 DIRECTORIES = ("steps", "references")
-HELPERS = ("plan_preview.py", "evidence_audit.py", "runtime_check.py")
+HELPERS = ("plan_preview.py", "plan_record.py", "evidence_audit.py", "runtime_check.py")
 
 
 def package_skill(root: Path, output: Path, target: str) -> Path:
