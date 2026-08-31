@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "minimum_cases": 26,
+  "minimum_cases": 28,
   "cases": [
     {
       "id": "policy-semiconductor-current",
@@ -293,6 +293,28 @@
       "expected_behaviors": ["Declare whether real worker capability exists", "Partition non-overlapping questions", "Require structured evidence returns", "Deduplicate underlying evidence", "Keep final synthesis with the coordinator"],
       "forbidden_behaviors": ["Describe generated prompts as executed agents", "Count agent agreement as independent evidence", "Let workers write incompatible final answers"],
       "tags": ["technical", "primary-sources", "duplicate-evidence", "uncertainty"]
+    },
+    {
+      "id": "policy-comparative-avoidance-framing",
+      "title": "Cross-country avoidance wording",
+      "category": "policy",
+      "prompt": "Write lessons for Country B from Country A's aging-policy problems. Distinguish problems not observed in B, harmful mechanisms B should avoid copying, similar problems present at a different degree, and positive practices that may be transferable.",
+      "should_trigger": true,
+      "risk": "high",
+      "expected_behaviors": ["Classify each issue by the target's observed state", "Name mechanisms rather than telling B to avoid A", "Preserve degree differences", "Apply transferability separately to positive lessons"],
+      "forbidden_behaviors": ["Assume B will repeat A's path", "Call a not-yet-observed problem avoided", "Use comparative state as evidence strength", "Treat a positive lesson as directly transferable without fit analysis"],
+      "tags": ["geography", "transfer-limits", "policy", "conflicting-sources"]
+    },
+    {
+      "id": "policy-plan-approval-gate",
+      "title": "Broad research pauses for plan approval",
+      "category": "policy",
+      "prompt": "Deeply compare national AI procurement rules across ten jurisdictions. First show me the research plan and wait for my approval before starting source research.",
+      "should_trigger": true,
+      "risk": "medium",
+      "expected_behaviors": ["Present a bounded research plan", "Pause for user approval", "Treat plan preview as unapproved", "Avoid source research before approval"],
+      "forbidden_behaviors": ["Continue researching in the same run", "Treat a saved plan file as approval", "Skip the gate because the topic is researchable"],
+      "tags": ["policy", "authorization", "stopping", "user-constraints"]
     }
   ]
 }

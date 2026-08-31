@@ -7,7 +7,7 @@ description: >-
   competitive, or trend research. Do not use for quick factual lookups or
   requests that do not benefit from a multi-source research workflow.
 metadata:
-  version: 2.7.0
+  version: 2.7.1
   author: croni4666-cmd
 ---
 
@@ -58,6 +58,9 @@ does not imply that every answer must be long.
    that transfers a policy, practice, product, or finding into a materially
    different context, read
    [references/transferability.md](references/transferability.md).
+   For cross-country lessons, analogies, or "avoid another country's outcome"
+   framing, also read
+   [references/comparative-framing.md](references/comparative-framing.md).
 
 Read only the step needed for the current stage. The step files guide judgment;
 they are not a rigid trace protocol and never override user or runtime policy.

@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.7.1 - 2026-09-01
+
+- Restored the distinct four-state cross-country framing guard for target-not-
+  observed, mechanism-replication, different-degree, and positive-lesson cases.
+- Kept comparative framing separate from the v2.7.0 transfer decision levels;
+  the former controls descriptive bias and the latter decides applicability.
+- Clarified that broad or costly research must pause for conversational user
+  approval and that neither `plan_preview` nor a saved plan file satisfies the
+  approval gate.
+- Renamed offline evaluation material “fictional synthetic fixtures,” declared
+  every fixture ground truth fictional, and added a regression invariant.
+- Added audited `comparative_status` ledger values and evaluation cases for
+  avoidance-language bias and plan-first approval behavior.
+
 ## 2.7.0 - 2026-08-31
 
 - Restored region-aware source selection as a concise, provenance-based runtime

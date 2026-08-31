@@ -26,9 +26,22 @@ class RuntimeReferenceTests(unittest.TestCase):
     def test_portable_depth_references_are_runtime_files(self) -> None:
         expected = {
             "region-source-routing.md", "transferability.md", "parallel-research.md",
+            "comparative-framing.md",
         }
         actual = {path.name for path in (ROOT / "references").glob("*.md")}
         self.assertTrue(expected <= actual)
+
+    def test_every_offline_fixture_declares_fictional_ground_truth(self) -> None:
+        import json
+
+        paths = sorted((ROOT / "evals" / "fixtures").glob("*/ground-truth.json"))
+        self.assertTrue(paths)
+        missing = []
+        for path in paths:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if data.get("fictional") is not True:
+                missing.append(path.parent.name)
+        self.assertEqual(missing, [])
 
 
 if __name__ == "__main__":

@@ -26,6 +26,8 @@ class EvalCatalogTests(unittest.TestCase):
             "policy-cross-context-transfer",
             "market-local-language-routing",
             "technical-parallel-decomposition",
+            "policy-comparative-avoidance-framing",
+            "policy-plan-approval-gate",
         } <= case_ids)
 
     def test_duplicate_case_id_fails(self) -> None:

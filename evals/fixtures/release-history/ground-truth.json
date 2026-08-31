@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "fictional": true,
   "evaluator_only": true,
   "cutoff_date": "2026-08-31",
   "package": "OrchidFlow",
