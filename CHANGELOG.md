@@ -20,6 +20,11 @@
   Markdown-row measurements without making semantic quality judgments.
 - Added offline stale-release-status and duplicate-table-row fixtures plus a
   repeated three-mode regression suite.
+- Added one-command creation and revalidation of the complete declared
+  mode-by-repeat run matrix without claiming that candidate runs occurred.
+- Added blinded two-reviewer sheets, strict artifact matching, field-level
+  disagreement reports, explicit adjudication, and validated final-review
+  reconstruction.
 
 ## 2.3.0 - 2026-08-31
 

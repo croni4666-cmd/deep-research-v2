@@ -45,6 +45,23 @@ python scripts\eval_bundle.py create `
   --output path\to\run-bundles
 ```
 
+Prepare the complete three-mode, three-repeat matrix in one operation:
+
+```powershell
+python scripts\eval_bundle.py create-matrix `
+  --suite offline-regression-v1 `
+  --model gpt-example `
+  --output path\to\run-matrices
+```
+
+This creates nine isolated bundles plus a hashed `matrix.json`. It prepares the
+experiment but does not run a model. Verify every bundle before and after the
+runs with:
+
+```powershell
+python scripts\eval_bundle.py validate-matrix path\to\run-matrix
+```
+
 ## Modes to compare
 
 Run every trigger case in three modes:
@@ -126,6 +143,54 @@ Historical schema-v1 results remain valid. New schema-v2 results add:
 
 In schema v2, only `output_word_count` and `source_count` are automatically
 derived. All semantic quality fields remain explicitly human-reviewed.
+
+## Independent review and adjudication
+
+First give the frozen raw answer an anonymized path that does not contain
+`builtin`, `evidence`, or `combined`; the preparation command rejects paths
+that reveal the mode. Prepare two review sheets from that same anonymized raw
+answer. Reviewer IDs must be distinct:
+
+```powershell
+python scripts\eval_review.py prepare evals\raw\candidate-answer.md `
+  --reviewer reviewer-a --date 2026-08-31 `
+  --case-id adversarial-current-release-status `
+  --output path\to\review-a.json
+
+python scripts\eval_review.py prepare evals\raw\candidate-answer.md `
+  --reviewer reviewer-b --date 2026-08-31 `
+  --case-id adversarial-current-release-status `
+  --output path\to\review-b.json
+```
+
+Each reviewer completes their sheet independently. Do not show either sheet to
+the other reviewer. Automatic word, URL, and duplicate-row measurements are
+excluded from these sheets so reviewers cannot overwrite them. Validate both
+completed reviews and compare them:
+
+```powershell
+python scripts\eval_review.py validate path\to\review-a.json --complete
+python scripts\eval_review.py validate path\to\review-b.json --complete
+python scripts\eval_review.py compare path\to\review-a.json `
+  path\to\review-b.json --output path\to\adjudication.json
+```
+
+The comparison hashes both review files and records every differing routing,
+behavior, or human-metric judgment. It does not select a winner. An adjudicator
+must fill `adjudicator_id`, `adjudicated_on`, and every disagreement's `final`
+and `rationale`. Numeric adjudications may correct both reviewers when neither
+count is accurate. Then validate and rebuild the complete final review:
+
+```powershell
+python scripts\eval_review.py validate-adjudication path\to\adjudication.json
+python scripts\eval_review.py finalize path\to\adjudication.json `
+  path\to\review-a.json path\to\review-b.json `
+  --output path\to\final-review.json
+```
+
+Finalization rechecks the two review hashes, recomputes the disagreement set,
+applies the resolutions, and validates all cross-field count relationships.
+Agreement counts are descriptive and must not be presented as model quality.
 
 Compare two or more completed results only when their model, prompt revision,
 source access, and completed case sets match:

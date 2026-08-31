@@ -31,5 +31,7 @@ jobs:
         run: python -m unittest tests.test_eval_results -v
       - name: Exercise raw-output metric extraction
         run: python -m unittest tests.test_eval_ingest -v
+      - name: Exercise independent review and adjudication
+        run: python -m unittest tests.test_eval_review -v
       - name: Smoke-test plan preview
         run: python scripts/plan_preview.py --topic "test topic" --json

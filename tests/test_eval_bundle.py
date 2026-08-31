@@ -6,7 +6,12 @@ import unittest
 from datetime import UTC, datetime
 from pathlib import Path
 
-from scripts.eval_bundle import create_bundle, validate_bundle
+from scripts.eval_bundle import (
+    create_bundle,
+    create_matrix,
+    validate_bundle,
+    validate_matrix,
+)
 
 ROOT = Path(__file__).parents[1]
 
@@ -90,6 +95,37 @@ class EvalBundleTests(unittest.TestCase):
             self.assertTrue(all("/sources/" in path for path in candidate_paths))
             self.assertFalse(any("ground-truth" in path for path in candidate_paths))
             self.assertEqual(validate_bundle(bundle, ROOT)["verdict"], "PASS")
+
+    def test_matrix_prepares_every_mode_and_repeat_and_detects_drift(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            matrix_dir, matrix = create_matrix(
+                root=ROOT,
+                suites_path=ROOT / "evals" / "suites.json",
+                catalog_path=ROOT / "evals" / "cases.json",
+                suite_id="offline-regression-v1",
+                model="test-model",
+                output_parent=Path(temporary),
+                now=datetime(2026, 8, 31, 2, 3, 4, tzinfo=UTC),
+            )
+            self.assertEqual(matrix["expected_run_count"], 9)
+            self.assertEqual(
+                {(item["mode"], item["repeat"]) for item in matrix["bundles"]},
+                {
+                    (mode, repeat)
+                    for mode in ("builtin", "evidence", "combined")
+                    for repeat in (1, 2, 3)
+                },
+            )
+            validation = validate_matrix(matrix_dir, ROOT)
+            self.assertEqual(validation["verdict"], "PASS", validation["issues"])
+            manifest = matrix_dir / matrix["bundles"][0]["path"] / "manifest.json"
+            manifest.write_text(manifest.read_text(encoding="utf-8") + " ", encoding="utf-8")
+            validation = validate_matrix(matrix_dir, ROOT)
+            self.assertEqual(validation["verdict"], "FAIL")
+            self.assertIn(
+                "matrix.manifest_hash_mismatch",
+                {item["code"] for item in validation["issues"]},
+            )
 
 
 if __name__ == "__main__":
