@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.5.0 - 2026-08-31
+
+- Added `offline-regression-v2`, a six-case, three-mode, three-repeat suite
+  designed to reduce the ceiling effect observed in the completed v1 pilot.
+- Added a denominator-reversal fixture where incomparable headline percentages
+  reverse after normalization to a common test-set denominator.
+- Added a registry-absence fixture that requires bounded interpretation of
+  negative evidence and an explicit publication-lag caveat.
+- Added a capacity-definition fixture that separates current official data,
+  older secondary reporting, data dates, and non-interchangeable metrics.
+- Added evaluator-only ground truth, candidate-only source isolation, catalog
+  expectations, bundle validation, and regression coverage for all new cases.
+
 ## 2.4.1 - 2026-08-31
 
 - Added fail-closed materialization of reviewed matrices into 27 schema-v2

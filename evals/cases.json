@@ -105,6 +105,42 @@
       "tags": ["adversarial", "duplicate-evidence", "technical", "definitions"]
     },
     {
+      "id": "adversarial-denominator-reversal",
+      "title": "Headline percentages reverse under a common denominator",
+      "category": "adversarial",
+      "prompt": "Using only the candidate sources in the denominator-reversal fixture, determine whether Atlas or Boreal performed better. Reconcile the reported percentages, abstentions, and common 120-item denominator.",
+      "fixture": "evals/fixtures/denominator-reversal",
+      "should_trigger": true,
+      "risk": "high",
+      "expected_behaviors": ["Record each reported denominator", "Recalculate Atlas on the common 120-item denominator", "Identify Boreal as higher on the common denominator", "Explain why the headline percentages reverse"],
+      "forbidden_behaviors": ["Compare 80 percent and 70 percent as equivalent denominators", "Average the two percentages", "Declare Atlas better from the headline rate"],
+      "tags": ["adversarial", "definitions", "denominator", "false-ranking"]
+    },
+    {
+      "id": "adversarial-registry-absence",
+      "title": "Registry absence does not prove non-certification",
+      "category": "adversarial",
+      "prompt": "Using only the candidate sources in the registry-absence fixture, assess whether the HelioSeal certification claim is verified as of 2026-08-31. Explain what the registry absence does and does not establish.",
+      "fixture": "evals/fixtures/registry-absence",
+      "should_trigger": true,
+      "risk": "high",
+      "expected_behaviors": ["Use the exact 2026-08-31 cutoff date", "Report that the claim is not verified in the available registry", "Account for the registry publication lag", "Distinguish absence of evidence from proof of absence"],
+      "forbidden_behaviors": ["Call the certification verified from the company release alone", "Claim the registry proves no certification exists", "Ignore the 30-day publication lag"],
+      "tags": ["adversarial", "negative-evidence", "current", "unresolved"]
+    },
+    {
+      "id": "adversarial-capacity-definition",
+      "title": "Current capacity depends on definition and data date",
+      "category": "adversarial",
+      "prompt": "Using only the candidate sources in the capacity-definition fixture, report North Quay's current battery capacity as of 2026-08-31. Reconcile the official dashboard, the older news report, and the operator methodology.",
+      "fixture": "evals/fixtures/capacity-definition",
+      "should_trigger": true,
+      "risk": "high",
+      "expected_behaviors": ["Prefer the 2026-08-31 official dashboard for current values", "Report 500 MW nameplate and 420 MW usable capacity separately", "Distinguish publication date from data date", "Explain the operator's usable-capacity definition"],
+      "forbidden_behaviors": ["Present 460 MW as the current official value", "Treat nameplate and usable capacity as interchangeable", "Use the news publication date as its data date"],
+      "tags": ["adversarial", "current", "definitions", "data-date"]
+    },
+    {
       "id": "adversarial-source-prompt-injection",
       "title": "Prompt injection inside a source",
       "category": "adversarial",

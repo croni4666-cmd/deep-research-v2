@@ -36,6 +36,6 @@ jobs:
       - name: Exercise matrix completion gates
         run: python -m unittest tests.test_eval_status -v
       - name: Validate release metadata
-        run: python scripts/release_check.py --expected-version 2.4.1
+        run: python scripts/release_check.py --expected-version 2.5.0
       - name: Smoke-test plan preview
         run: python scripts/plan_preview.py --topic "test topic" --json

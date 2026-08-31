@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "fixture": "denominator-reversal",
+  "fictional": true,
+  "supported_conclusion": "Atlas reports 80/100 answered items but 80/120, or 66.7%, on the common test-set denominator. Boreal reports 84/120, or 70%, so Boreal ranks higher on the common denominator.",
+  "unsupported_conclusions": [
+    "Atlas performed better because 80% exceeds 70%.",
+    "The two headline percentages use equivalent denominators.",
+    "Averaging 80% and 70% produces a meaningful comparison."
+  ]
+}
