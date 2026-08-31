@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.3.0 - Unreleased
+## 2.3.0 - 2026-08-31
 
 - Added a versioned catalog of realistic trigger, routing, high-risk, and
   adversarial research requests.
