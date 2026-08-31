@@ -18,10 +18,14 @@ available when the runtime has actually declared subagent capability; follow
 
 For broad, expensive, or materially ambiguous work, present the concise plan to
 the user and wait for approval. If the user already supplied or approved a clear
-plan, continue without another approval gate. A plan file is optional and
-should be created only when the user requests a reusable artifact.
+plan, continue without another approval gate. For research spanning sessions,
+multiple workers, material cost or risk, or an audit requirement, read
+[../references/plan-artifact.md](../references/plan-artifact.md) and consider an
+optional plan record plus a separate approval receipt.
 
 The approval gate is satisfied only by the user's approval in the conversation.
 Generating `plan_preview` output or writing a plan file does not satisfy it. Do
 not begin source research while approval is pending. A runtime that cannot pause
 must return the plan and stop; it must not silently continue in the same run.
+If an approved plan's fingerprint changes, approval is stale and the revised
+plan must be shown and approved again before source research resumes.

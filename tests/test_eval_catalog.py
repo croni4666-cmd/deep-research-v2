@@ -28,6 +28,7 @@ class EvalCatalogTests(unittest.TestCase):
             "technical-parallel-decomposition",
             "policy-comparative-avoidance-framing",
             "policy-plan-approval-gate",
+            "adversarial-plan-approval-drift",
         } <= case_ids)
 
     def test_duplicate_case_id_fails(self) -> None:

@@ -26,7 +26,7 @@ class RuntimeReferenceTests(unittest.TestCase):
     def test_portable_depth_references_are_runtime_files(self) -> None:
         expected = {
             "region-source-routing.md", "transferability.md", "parallel-research.md",
-            "comparative-framing.md",
+            "comparative-framing.md", "plan-artifact.md",
         }
         actual = {path.name for path in (ROOT / "references").glob("*.md")}
         self.assertTrue(expected <= actual)
