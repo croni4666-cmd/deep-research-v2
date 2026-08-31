@@ -18,6 +18,11 @@ tools or MCP for live research. For Mavis, verify that the particular session
 actually indexes the Skill. If it cannot, use the protocol-only label described
 in `references/runtime-compatibility.md`.
 
+Do not leave a legacy broadly triggered `deep-research` Skill active beside
+`evidence-deep-research`. Back it up outside the configured `skills_dir`; two
+similar descriptions make automatic selection ambiguous even when the folder
+names differ. Preserve the old folder for rollback rather than deleting it.
+
 ## What the checks establish
 
 Repository tests build the complete MiniMax package, run its packaged runtime

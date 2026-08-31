@@ -46,6 +46,14 @@ the Skill and can inspect sources. If the interface accepts only pasted prompts
 or cannot expose its loaded Skills, use protocol-only and say so. Do not infer
 capabilities from a product name or from API compatibility alone.
 
+Keep only one broadly triggered deep-research Skill active in a Mavis
+`skills_dir`. If a legacy `deep-research` Skill and `evidence-deep-research`
+coexist, their descriptions may both match the same request; folder names do
+not establish precedence. Back up the legacy Skill outside `skills_dir`, load
+`evidence-deep-research`, and retain a run record containing the reported Skill
+version. If the product cannot reveal which Skill it loaded, treat the run as
+protocol-only rather than choosing by inference.
+
 Runtime formats can change. Re-run the capability declaration after upgrades
 or when tools, MCP servers, permissions, or model settings change.
 

@@ -11,6 +11,7 @@ from scripts.plan_record import (
     build_approval_receipt,
     build_plan_document,
     compute_plan_hash,
+    compute_receipt_hash,
     default_approval_path,
     main,
     verify_approval,
@@ -42,6 +43,7 @@ class PlanRecordTests(unittest.TestCase):
         valid, issues = verify_approval(plan, receipt)
         self.assertTrue(valid, issues)
         self.assertEqual(receipt["plan_hash"], plan["plan_hash"])
+        self.assertEqual(receipt["receipt_hash"], compute_receipt_hash(receipt))
 
     def test_plan_drift_invalidates_old_receipt(self) -> None:
         path = Path("research-plan.json")
@@ -64,6 +66,30 @@ class PlanRecordTests(unittest.TestCase):
         valid, issues = verify_approval(plan, receipt)
         self.assertFalse(valid)
         self.assertIn("stored plan_hash does not match current plan content", issues)
+
+    def test_receipt_tampering_without_rehashing_is_detected(self) -> None:
+        plan = build_plan_document(
+            "Original topic", created_at="2026-09-01T00:00:00Z"
+        )
+        receipt = build_approval_receipt(Path("plan.json"), plan, "turn 7")
+        receipt["approval_reference"] = "changed reference"
+        valid, issues = verify_approval(plan, receipt)
+        self.assertFalse(valid)
+        self.assertIn(
+            "stored receipt_hash does not match current receipt content", issues
+        )
+
+    def test_legacy_receipt_requires_re_recording(self) -> None:
+        plan = build_plan_document("topic")
+        receipt = build_approval_receipt(Path("plan.json"), plan, "turn 7")
+        receipt["schema_version"] = 1
+        receipt.pop("receipt_hash")
+        valid, issues = verify_approval(plan, receipt)
+        self.assertFalse(valid)
+        self.assertIn(
+            "legacy approval schema 1 has no receipt integrity hash; re-record approval",
+            issues,
+        )
 
     def test_cli_create_approve_verify_and_collision_safety(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

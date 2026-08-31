@@ -8,14 +8,15 @@ It uses the tools and model available in the active runtime. Its optional
 Python helpers validate plan and evidence structure; they do not perform web
 research or prove factual correctness.
 
-## What changed in 2.7.2
+## What changed in 2.7.3
 
-- Added an optional JSON plan record for long, multi-session, multi-worker, or
-  audit-sensitive research.
-- Kept approval in a separate receipt bound to the exact SHA-256 plan hash;
-  creating a plan still does not count as user approval.
-- Added fail-closed verification that marks approval stale after plan drift,
-  plus package smoke tests and an adversarial evaluation case.
+- Added a schema-v2 receipt fingerprint so unrehashed edits to the approval
+  reference or any other receipt field fail closed.
+- Renamed the successful verification result to
+  `RECEIPT_MATCHES_CURRENT_PLAN`; local hashes establish file consistency, not
+  user identity or cryptographic proof of approval.
+- Documented legacy-receipt migration and a single-active-Skill rule for Mavis
+  to prevent ambiguous routing between old and current research Skills.
 
 ## Install in Codex
 
@@ -41,7 +42,7 @@ Enable Skills in Mini-Agent and configure search/open tools or MCP separately.
 Loading a Skill does not itself provide web access. See
 [`compatibility/README.md`](compatibility/README.md) and the example Mini-Agent
 configuration. A Mavis session that cannot demonstrably load the Skill must be
-reported as protocol-only, not as a v2.7.2 run.
+reported as protocol-only, not as a v2.7.3 run.
 
 ## Use
 
@@ -145,9 +146,11 @@ python scripts\plan_record.py verify research-plan.json
 ```
 
 Run `approve` only after explicit user approval. Verification returns
-`APPROVED_CURRENT` only when the receipt matches the current plan hash. It
-returns `NOT_APPROVED_CURRENT` if approval is missing, stale, or the plan was
-changed. See [`references/plan-artifact.md`](references/plan-artifact.md).
+`RECEIPT_MATCHES_CURRENT_PLAN` only when the receipt and current plan are
+internally consistent. It returns `NO_CURRENT_MATCHING_RECEIPT` if the receipt
+is missing, stale, legacy, modified without rehashing, or the plan was changed.
+These local hashes do not authenticate the approving user. See
+[`references/plan-artifact.md`](references/plan-artifact.md).
 
 ## Development
 
@@ -157,7 +160,7 @@ library.
 ```powershell
 python -m compileall -q scripts tests
 python -m unittest discover -s tests -v
-python scripts\release_check.py --expected-version 2.7.2
+python scripts\release_check.py --expected-version 2.7.3
 python <skill-creator-dir>\scripts\quick_validate.py .
 ```
 
