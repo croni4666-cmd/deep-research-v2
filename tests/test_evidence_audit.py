@@ -196,6 +196,15 @@ class EvidenceAuditTests(unittest.TestCase):
         result = audit_ledger(ledger)
         self.assertEqual(result["verdict"], "PASS", result["issues"])
 
+    def test_invalid_comparative_status_fails(self) -> None:
+        ledger = copy.deepcopy(valid_ledger())
+        ledger["claims"][0]["comparative_status"] = "avoided"
+        result = audit_ledger(ledger)
+        self.assertIn(
+            "claim.invalid_comparative_status",
+            {issue["code"] for issue in result["issues"]},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

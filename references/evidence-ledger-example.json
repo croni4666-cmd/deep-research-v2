@@ -13,6 +13,7 @@
       "claim": "Two independent inspected records report the bounded result.",
       "importance": "key",
       "status": "verified",
+      "comparative_status": "positive_lesson_candidate",
       "transfer_assessment": {
         "source_context": "Example Region A",
         "target_context": "Example Region B",

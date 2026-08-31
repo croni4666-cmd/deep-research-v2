@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "fictional": true,
   "evaluator_only": true,
   "expected_entities": ["cedar-alpha", "cedar-beta"],
   "expected_data_row_count": 2,

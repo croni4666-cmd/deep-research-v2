@@ -29,6 +29,10 @@ SOURCE_ROLE_VALUES = {
 TRANSFER_LEVEL_VALUES = {
     "directly_transferable", "adaptation_required", "pilot_only", "not_transferable",
 }
+COMPARATIVE_STATUS_VALUES = {
+    "target_not_observed", "avoid_mechanism_replication",
+    "present_different_degree", "positive_lesson_candidate",
+}
 
 
 def _issue(issues: list[dict[str, str]], severity: str, code: str,
@@ -179,6 +183,12 @@ def audit_ledger(data: Any, *, min_key_sources: int = 2,
                     _issue(issues, "error", "transfer.missing_adaptations",
                            f"{transfer_path}.adaptations",
                            "This transfer level requires at least one adaptation or test condition.")
+
+        comparative_status = claim.get("comparative_status")
+        if comparative_status is not None and comparative_status not in COMPARATIVE_STATUS_VALUES:
+            _issue(issues, "error", "claim.invalid_comparative_status",
+                   f"{path}.comparative_status",
+                   f"comparative_status must be one of {sorted(COMPARATIVE_STATUS_VALUES)}.")
 
         evidence = claim.get("evidence", [])
         if not isinstance(evidence, list):

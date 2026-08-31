@@ -20,3 +20,8 @@ For broad, expensive, or materially ambiguous work, present the concise plan to
 the user and wait for approval. If the user already supplied or approved a clear
 plan, continue without another approval gate. A plan file is optional and
 should be created only when the user requests a reusable artifact.
+
+The approval gate is satisfied only by the user's approval in the conversation.
+Generating `plan_preview` output or writing a plan file does not satisfy it. Do
+not begin source research while approval is pending. A runtime that cannot pause
+must return the plan and stop; it must not silently continue in the same run.

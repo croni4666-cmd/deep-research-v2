@@ -63,6 +63,10 @@ real-world evidence.
   `rationale`, and `adaptations`. Valid levels are `directly_transferable`,
   `adaptation_required`, `pilot_only`, and `not_transferable`; adaptation and
   pilot levels require at least one named adaptation or test condition.
+- Cross-country comparison claims may add `comparative_status` with one of
+  `target_not_observed`, `avoid_mechanism_replication`,
+  `present_different_degree`, or `positive_lesson_candidate`. This descriptive
+  status does not replace the separate `transfer_assessment` decision.
 - Unresolved claims may have no supporting evidence, but they must remain
   visibly unresolved in the report.
 - A verified key claim normally needs at least two supporting independence

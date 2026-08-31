@@ -8,17 +8,17 @@ It uses the tools and model available in the active runtime. Its optional
 Python helpers validate plan and evidence structure; they do not perform web
 research or prove factual correctness.
 
-## What changed in 2.7.0
+## What changed in 2.7.1
 
-- Restored region-aware source routing as a compact, provenance-based reference.
-- Added a four-level transferability framework for moving evidence, policy, or
-  practice across populations, jurisdictions, organizations, and markets.
-- Added a vendor-neutral parallel research contract that activates only when
-  real subagent capability is declared and available.
-- Extended evidence ledgers with optional regional source roles and structured
-  transfer assessments.
-- Added three realistic evaluation cases and a seventh suite for these deeper
-  behaviors, without restoring simulated orchestration or fabricated scores.
+- Restored the separate four-state cross-country wording guard for problems not
+  observed in the target, mechanisms to avoid copying, similar problems at a
+  different degree, and positive lesson candidates.
+- Kept that descriptive bias control separate from the four transferability
+  decision levels introduced in 2.7.0.
+- Made the plan-first gate unambiguous: broad or costly research pauses for the
+  user's conversational approval; previews and saved files are not approval.
+- Renamed offline test material “fictional synthetic fixtures” and added audited
+  comparative-status values plus dedicated evaluation cases.
 
 ## Install in Codex
 
@@ -44,7 +44,7 @@ Enable Skills in Mini-Agent and configure search/open tools or MCP separately.
 Loading a Skill does not itself provide web access. See
 [`compatibility/README.md`](compatibility/README.md) and the example Mini-Agent
 configuration. A Mavis session that cannot demonstrably load the Skill must be
-reported as protocol-only, not as a v2.7.0 run.
+reported as protocol-only, not as a v2.7.1 run.
 
 ## Use
 
@@ -112,6 +112,9 @@ The core Skill loads deeper guidance only when the task needs it:
   routes regional claims by provenance and claim type;
 - [`references/transferability.md`](references/transferability.md) separates
   evidence strength from cross-context applicability;
+- [`references/comparative-framing.md`](references/comparative-framing.md)
+  prevents biased “avoid another country's outcome” wording before transfer is
+  assessed;
 - [`references/parallel-research.md`](references/parallel-research.md) defines
   worker, merge, and verifier contracts for runtimes with real subagents.
 
@@ -119,6 +122,10 @@ The core Skill loads deeper guidance only when the task needs it:
 workers inherit the required search/open tools. Generated prompts, empty result
 objects, and multiple model opinions are not executed agents or independent
 evidence.
+
+For broad, costly, or materially ambiguous work, the plan must be shown in the
+conversation and research must pause until the user approves it. Running
+`plan_preview.py` or saving a plan file does not count as approval.
 
 ## Plan preview
 
@@ -139,7 +146,7 @@ library.
 ```powershell
 python -m compileall -q scripts tests
 python -m unittest discover -s tests -v
-python scripts\release_check.py --expected-version 2.7.0
+python scripts\release_check.py --expected-version 2.7.1
 python <skill-creator-dir>\scripts\quick_validate.py .
 ```
 
