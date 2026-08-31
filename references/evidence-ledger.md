@@ -3,6 +3,10 @@
 Use a JSON ledger when research is consequential, collaborative, reusable, or
 will be checked by `scripts/evidence_audit.py`.
 
+See [evidence-ledger-example.json](evidence-ledger-example.json) for a complete,
+synthetic ledger containing all five access states. It is a schema example, not
+real-world evidence.
+
 ```json
 {
   "schema_version": 2,

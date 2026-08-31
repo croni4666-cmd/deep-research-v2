@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.6.1 - 2026-08-31
+
+- Made non-classifying runtime fields optional with conservative `false`
+  defaults while retaining fail-closed requirements for loading and source
+  inspection capabilities.
+- Clarified that runtime profiles classify operator declarations and do not
+  probe or attest to actual product integration.
+- Added a strict-valid schema-v2 example covering all five source-access states
+  and expanded access-state regression coverage.
+- Added an end-to-end package test that executes the runtime classifier and
+  evidence audit from inside the generated MiniMax bundle.
+- Marked offline `.example` fixtures prominently as synthetic and unsuitable
+  for live-source research.
+- Extended plan previews with primary-source requirements and anticipated
+  access risks without claiming URL or factual verification.
+
 ## 2.6.0 - 2026-08-31
 
 - Added explicit native, compatible, and protocol-only runtime capability

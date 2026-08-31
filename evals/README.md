@@ -1,5 +1,10 @@
 # Forward-evaluation catalog
 
+> **Synthetic offline fixtures:** URLs under `evals/fixtures/` intentionally use
+> reserved `.example` domains. They test deterministic reasoning and validation
+> without network access. They are not live sources, fetch targets, or evidence
+> for real-world research. Live-source runs must be recorded separately.
+
 `cases.json` contains realistic prompts and observable expectations for testing
 the Skill. It is deliberately separate from `SKILL.md` so evaluation detail
 does not increase runtime context or alter research behavior.

@@ -19,6 +19,9 @@ absence must reduce convenience, not be disguised as successful execution.
 At the beginning of a consequential run, record the runtime, model identifier
 when exposed, whether the Skill was loaded, and whether source search and
 opening are available. `scripts/runtime_check.py` can classify this declaration.
+It classifies values supplied by the operator or runtime; it does not detect,
+probe, or attest that a product actually loaded the Skill. Missing optional
+write, shell, MCP, and subagent fields default to `false`.
 
 ## Codex
 

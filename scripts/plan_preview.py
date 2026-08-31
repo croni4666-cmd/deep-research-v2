@@ -16,6 +16,8 @@ class ResearchPlan:
     depth: int
     questions: list[str]
     stopping_conditions: list[str]
+    source_requirements: list[str]
+    anticipated_access_risks: list[str]
     status: str = "plan_only"
     verified: bool = False
 
@@ -47,6 +49,16 @@ def build_plan(topic: str, region: str = "Global", depth: int = 3) -> ResearchPl
             "Every question is resolved, qualified, unresolved, or excluded with a reason.",
             "Further progress requires unavailable credentials, paid access, or new authority.",
         ],
+        source_requirements=[
+            "Identify the canonical primary source for each key claim.",
+            "Record the inspected representation and a stable identifier when available.",
+            "Use independent underlying evidence for key claims when reasonably available.",
+        ],
+        anticipated_access_risks=[
+            "Publisher blocks or paywalls may require lawful repository or metadata fallbacks.",
+            "Government and registry URLs may drift; rediscover by title or identifier.",
+            "Metadata-only records cannot verify detailed claim content.",
+        ],
     )
 
 
@@ -55,12 +67,16 @@ def render_markdown(plan: ResearchPlan) -> str:
         f"{index}. {question}" for index, question in enumerate(plan.questions, 1)
     )
     stop_lines = "\n".join(f"- {item}" for item in plan.stopping_conditions)
+    source_lines = "\n".join(f"- {item}" for item in plan.source_requirements)
+    risk_lines = "\n".join(f"- {item}" for item in plan.anticipated_access_risks)
     return (
         f"# Research plan: {plan.topic}\n\n"
         f"- Region: {plan.region}\n"
         f"- Depth: {plan.depth}\n"
         f"- Status: plan only; no research performed\n\n"
         f"## Research questions\n\n{question_lines}\n\n"
+        f"## Source requirements\n\n{source_lines}\n\n"
+        f"## Anticipated access risks\n\n{risk_lines}\n\n"
         f"## Stopping conditions\n\n{stop_lines}\n"
     )
 
