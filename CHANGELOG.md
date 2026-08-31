@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.0 - Unreleased
+## 2.4.0 - 2026-08-31
 
 - Added versioned live, offline, routing, pilot, and repeated-run suite
   manifests with validation against the case catalog.
@@ -29,6 +29,8 @@
   protocol, and fail-closed prepared/raw/metrics/reviewed completion gates.
 - Documented the evidence-release gate so prepared infrastructure cannot be
   mistaken for completed repeated pilots or comparative benchmark evidence.
+- Added a deterministic release-metadata check for project, Skill, changelog,
+  and README version consistency without publishing tags or benchmark claims.
 
 ## 2.3.0 - 2026-08-31
 
