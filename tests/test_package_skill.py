@@ -18,7 +18,7 @@ class PackageSkillTests(unittest.TestCase):
             destination = package_skill(ROOT, Path(temporary), "minimax")
             manifest = json.loads((destination / "PACKAGE.json").read_text())
             self.assertEqual(manifest["target"], "minimax")
-            self.assertEqual(manifest["version"], "2.7.2")
+            self.assertEqual(manifest["version"], "2.7.3")
             self.assertTrue((destination / "SKILL.md").is_file())
             self.assertTrue((destination / "references" / "source-access.md").is_file())
             self.assertTrue((destination / "scripts" / "runtime_check.py").is_file())
@@ -105,7 +105,7 @@ class PackageSkillTests(unittest.TestCase):
                 text=True,
             )
             self.assertEqual(verify.returncode, 0, verify.stdout + verify.stderr)
-            self.assertIn("APPROVED_CURRENT", verify.stdout)
+            self.assertIn("RECEIPT_MATCHES_CURRENT_PLAN", verify.stdout)
 
 
 if __name__ == "__main__":

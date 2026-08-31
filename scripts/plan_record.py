@@ -33,6 +33,12 @@ def compute_plan_hash(document: dict[str, Any]) -> str:
     return "sha256:" + hashlib.sha256(_canonical_bytes(payload)).hexdigest()
 
 
+def compute_receipt_hash(receipt: dict[str, Any]) -> str:
+    payload = dict(receipt)
+    payload.pop("receipt_hash", None)
+    return "sha256:" + hashlib.sha256(_canonical_bytes(payload)).hexdigest()
+
+
 def build_plan_document(
     topic: str,
     region: str = "Global",
@@ -103,8 +109,8 @@ def build_approval_receipt(
     issues = validate_plan(document)
     if issues:
         raise ValueError("invalid plan: " + "; ".join(issues))
-    return {
-        "schema_version": 1,
+    receipt = {
+        "schema_version": 2,
         "artifact_type": "research_plan_approval",
         "status": "approved",
         "approved_at": approved_at or _timestamp(),
@@ -116,6 +122,8 @@ def build_approval_receipt(
             "proof that approval occurred."
         ),
     }
+    receipt["receipt_hash"] = compute_receipt_hash(receipt)
+    return receipt
 
 
 def verify_approval(
@@ -125,8 +133,13 @@ def verify_approval(
     if receipt is None:
         issues.append("no approval receipt supplied")
         return False, issues
-    if receipt.get("schema_version") != 1:
-        issues.append("approval schema_version must be 1")
+    schema_version = receipt.get("schema_version")
+    if schema_version == 1:
+        issues.append(
+            "legacy approval schema 1 has no receipt integrity hash; re-record approval"
+        )
+    elif schema_version != 2:
+        issues.append("approval schema_version must be 2")
     if receipt.get("artifact_type") != "research_plan_approval":
         issues.append("approval artifact_type must be research_plan_approval")
     if receipt.get("status") != "approved":
@@ -135,6 +148,13 @@ def verify_approval(
         issues.append("approval_reference is missing")
     if receipt.get("plan_hash") != document.get("plan_hash"):
         issues.append("approval receipt does not match the current plan hash")
+    if schema_version == 2:
+        stored_receipt_hash = receipt.get("receipt_hash")
+        if (
+            not isinstance(stored_receipt_hash, str)
+            or stored_receipt_hash != compute_receipt_hash(receipt)
+        ):
+            issues.append("stored receipt_hash does not match current receipt content")
     return not issues, issues
 
 
@@ -150,7 +170,7 @@ def main(argv: list[str] | None = None) -> int:
     create.add_argument("--force", action="store_true")
 
     approve = commands.add_parser(
-        "approve", help="Record approval already given by the user"
+        "approve", help="Record an operator-attested approval receipt"
     )
     approve.add_argument("plan", type=Path)
     approve.add_argument("--approval-reference", required=True)
@@ -176,16 +196,16 @@ def main(argv: list[str] | None = None) -> int:
                 args.plan, document, args.approval_reference
             )
             _write_new(output, receipt, args.force)
-            print(f"APPROVAL_RECORDED: {output} ({receipt['plan_hash']})")
+            print(f"RECEIPT_RECORDED: {output} ({receipt['receipt_hash']})")
             return 0
 
         approval_path = args.approval or default_approval_path(args.plan)
         receipt = _read_object(approval_path) if approval_path.exists() else None
         valid, issues = verify_approval(document, receipt)
         if valid:
-            print(f"APPROVED_CURRENT: {document['plan_hash']}")
+            print(f"RECEIPT_MATCHES_CURRENT_PLAN: {document['plan_hash']}")
             return 0
-        print("NOT_APPROVED_CURRENT")
+        print("NO_CURRENT_MATCHING_RECEIPT")
         for issue in issues:
             print(f"- {issue}")
         return 1

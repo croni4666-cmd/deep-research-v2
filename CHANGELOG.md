@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.7.3 - 2026-09-01
+
+- Added a schema-v2 receipt fingerprint covering every approval-receipt field;
+  unrehashed edits now fail verification.
+- Replaced `APPROVED_CURRENT` with the narrower
+  `RECEIPT_MATCHES_CURRENT_PLAN` result so local file consistency is not
+  presented as authentication or independent proof of user approval.
+- Made schema-v1 receipts fail closed with an explicit re-recording path after
+  the operator checks the original conversation.
+- Added receipt-tampering and legacy-receipt tests to the portable package.
+- Documented concrete privacy-conscious approval references and the limits of
+  self-contained hashes.
+- Added a single-active-Skill rule for Mavis deployments to prevent ambiguous
+  selection between legacy and current deep-research Skills.
+- Updated third-party metadata to the current release version.
+
 ## 2.7.2 - 2026-09-01
 
 - Added an optional auditable plan record for long, multi-session,

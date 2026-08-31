@@ -28,15 +28,32 @@ Use a real, non-invented reference appropriate to the runtime, such as a turn
 identifier or a concise description of the approval message. Do not place
 private conversation content in a shared artifact unless authorized.
 
-The plan retains `approval_status: pending`; approval state is derived from the
+The plan retains `approval_status: pending`; receipt state is derived from the
 separate receipt. This prevents a saved plan from representing itself as user
-approved. Verification emits:
+approved. Receipt schema v2 fingerprints its own fields as well as naming the
+plan hash, so accidental or unrehashed edits to either file are detected.
+Verification emits:
 
-- `APPROVED_CURRENT` with exit code `0` only when the plan is internally intact
-  and the receipt names its exact hash;
-- `NOT_APPROVED_CURRENT` with exit code `1` when approval is absent, stale, or
-  the plan has changed;
+- `RECEIPT_MATCHES_CURRENT_PLAN` with exit code `0` only when both artifacts are
+  internally intact and the receipt names the exact current plan hash;
+- `NO_CURRENT_MATCHING_RECEIPT` with exit code `1` when the receipt is absent,
+  stale, legacy, edited without rehashing, or the plan has changed;
 - `ERROR` with exit code `2` for unreadable input or command misuse.
+
+These hashes detect inconsistency; they do not authenticate the operator or
+prove that a user approved the plan. Anyone able to rewrite both files can
+recompute both hashes. High-assurance workflows need a runtime-provided signed
+event, trusted audit log, or external timestamp service outside this helper.
+
+Use a non-invented, minimally identifying reference. Examples include
+`session-2026-09-01-turn-42`, an opaque platform turn ID, or
+`conversation: user approved displayed plan`. Avoid copying private message
+content into a shared artifact.
+
+Receipt schema v1 from v2.7.2 remains readable but fails closed because it has
+no receipt integrity hash. After checking the original conversation, run
+`approve --force` to replace it with schema v2; do not migrate by merely adding
+fields or by assuming that the old file proves approval.
 
 If scope, questions, source policy, or stopping conditions change materially,
 create a new plan record or explicitly replace the old one, show the revised
