@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.7.4 - 2026-09-01
+
+- Replaced ambiguous `skill_loaded` booleans in new runtime manifests with
+  `verified`, `partial`, and `false` load attestations plus optional provenance
+  and content hashes; schema-v1 manifests remain readable with a warning.
+- Prevented partial Skill access from being classified as a complete versioned
+  run, addressing a contradiction observed in a retained MiniMax pilot.
+- Added a local-primary coverage gate for load-bearing regional law, policy,
+  official-statistics, and market claims.
+- Defined a claim-based secondary-substitute ratio and prohibited
+  primary-source labeling when most load-bearing claims rely only on secondary
+  substitutes.
+- Clarified that homepages, indexes, search results, and unreadable attachments
+  can establish visible metadata but not figures or findings inside them.
+- Strengthened final compression to remove unsupported tangents and expanded
+  runtime regression and packaged MiniMax smoke coverage.
+
 ## 2.7.3 - 2026-09-01
 
 - Added a schema-v2 receipt fingerprint covering every approval-receipt field;

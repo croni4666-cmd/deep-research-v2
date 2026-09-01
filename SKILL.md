@@ -7,7 +7,7 @@ description: >-
   competitive, or trend research. Do not use for quick factual lookups or
   requests that do not benefit from a multi-source research workflow.
 metadata:
-  version: 2.7.3
+  version: 2.7.4
   author: croni4666-cmd
 ---
 
@@ -71,6 +71,9 @@ they are not a rigid trace protocol and never override user or runtime policy.
 
 - Search snippets are discovery aids, not evidence. Inspect the source page or
   document before relying on it.
+- A homepage, index, catalog entry, or inaccessible document may establish that
+  a record exists and where it is published; it does not establish figures or
+  detailed findings inside that record.
 - When a source is blocked, metadata-only, unstable, or superseded, follow
   [references/source-access.md](references/source-access.md) and record what was
   actually inspected. Never describe metadata or a snippet as full text.
@@ -82,6 +85,10 @@ they are not a rigid trace protocol and never override user or runtime policy.
   observations—not merely different hostnames.
 - Record contradictions and relevant differences in date, geography,
   population, definition, and methodology.
+- For load-bearing regional law, policy, or market comparisons, satisfy the
+  local-primary coverage gate in
+  [references/region-source-routing.md](references/region-source-routing.md) or
+  narrow the conclusion and mark the missing jurisdiction unresolved.
 - A URL near a sentence does not prove that the source supports the sentence.
   Source entailment remains a substantive review judgment.
 - Use the structured format in

@@ -26,6 +26,12 @@ away material caveats or conflicting evidence merely to shorten the answer.
 Scan tables and lists for repeated entities, datasets, claims, or rows before
 delivery; consolidation must not create accidental duplicates.
 
+During compression, delete tangential claims that lack direct inspected
+support even when they sound plausible. Do not preserve unsupported detail to
+make the report appear comprehensive. If secondary substitutes support any
+load-bearing regional claim, disclose their claim-based ratio and do not call
+the report primary-source-based when that ratio exceeds one half.
+
 Before finishing, check that key conclusions have inspected support, citations
 are reachable and relevant, and unresolved issues are visible. Deliver in the
 conversation unless the user requested a reusable file.

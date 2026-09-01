@@ -23,6 +23,8 @@ For each research question:
    or a secondary substitute. Follow
    [../references/source-access.md](../references/source-access.md) when the
    canonical source is unavailable or unstable.
+   A homepage, index, search result, or unreadable attachment may establish
+   record metadata, but never the attachment's figures or findings.
 3. Record each consequential claim and its evidence. For reusable or
    consequential work, use
    [../references/evidence-ledger.md](../references/evidence-ledger.md).
@@ -50,3 +52,8 @@ has the active runtime's real privileges and is not assumed to be sandboxed.
 
 Before writing, confirm that every planned question has a visible disposition
 and every key conclusion has inspected support or an explicit uncertainty note.
+For current regional law, policy, or market work, also apply the local-primary
+coverage gate in
+[../references/region-source-routing.md](../references/region-source-routing.md)
+and calculate the claim-based secondary-substitute ratio when fallbacks were
+used.

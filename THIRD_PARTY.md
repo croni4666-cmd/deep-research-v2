@@ -1,6 +1,6 @@
 # Third-party acknowledgments
 
-Evidence Deep Research 2.7.3 has no required third-party Python runtime
+Evidence Deep Research 2.7.4 has no required third-party Python runtime
 dependencies. Its research workflow is informed by established ideas from
 research agents, evidence synthesis, and agent evaluation.
 

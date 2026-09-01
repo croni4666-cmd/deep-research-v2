@@ -3,6 +3,12 @@
 Record the strongest representation actually inspected, not the source that
 would have been ideal.
 
+A search result, homepage, navigation index, catalog entry, or inaccessible
+PDF can verify document existence, title, publisher, date, identifier, and a
+link only to the extent those fields are visible. It cannot support figures,
+methods, findings, legal requirements, or quotations located inside the
+uninspected document.
+
 ## Access ladder
 
 1. Open the canonical primary source or official document.
@@ -13,6 +19,15 @@ would have been ideal.
 4. Use a registry or bibliographic record for metadata only.
 5. Use a reputable secondary account when necessary and label it secondary.
 6. If the remaining evidence cannot support the claim, leave it unresolved.
+
+When a secondary account is the strongest accessible representation, record
+`secondary_substitute`; do not describe the research as primary-source-based.
+For a reusable regional report, disclose the share of load-bearing claims that
+depend only on secondary substitutes:
+
+`secondary_substitute_ratio = secondary-only load-bearing claims / all load-bearing claims`
+
+Count claims, not URLs. Mirrored copies do not change the ratio.
 
 Do not bypass access controls, repeatedly hammer a blocked host, or imply that
 an abstract, search snippet, DOI record, or registry stub is full text.

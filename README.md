@@ -8,15 +8,21 @@ It uses the tools and model available in the active runtime. Its optional
 Python helpers validate plan and evidence structure; they do not perform web
 research or prove factual correctness.
 
-## What changed in 2.7.3
+## What changed in 2.7.4
 
-- Added a schema-v2 receipt fingerprint so unrehashed edits to the approval
-  reference or any other receipt field fail closed.
-- Renamed the successful verification result to
-  `RECEIPT_MATCHES_CURRENT_PLAN`; local hashes establish file consistency, not
-  user identity or cryptographic proof of approval.
-- Documented legacy-receipt migration and a single-active-Skill rule for Mavis
-  to prevent ambiguous routing between old and current research Skills.
+- Replaced the ambiguous runtime `skill_loaded` boolean with schema-v2
+  `skill_load_status: verified | partial | false`, while retaining a warned
+  migration path for schema-v1 manifests.
+- Added optional load provenance and SHA-256 fields; partial access can no
+  longer be classified as a complete versioned Skill run.
+- Added a local-primary coverage gate for regional law, policy, official
+  statistics, and market comparisons.
+- Defined a claim-based `secondary_substitute_ratio` and prohibited
+  primary-source labeling when most load-bearing claims are secondary-only.
+- Clarified that homepages, indexes, snippets, and unreadable attachments can
+  establish record metadata but not figures or findings inside the record.
+- Strengthened final compression so unsupported tangents are removed instead
+  of retained for apparent comprehensiveness.
 
 ## Install in Codex
 
@@ -42,7 +48,7 @@ Enable Skills in Mini-Agent and configure search/open tools or MCP separately.
 Loading a Skill does not itself provide web access. See
 [`compatibility/README.md`](compatibility/README.md) and the example Mini-Agent
 configuration. A Mavis session that cannot demonstrably load the Skill must be
-reported as protocol-only, not as a v2.7.3 run.
+reported as protocol-only, not as a v2.7.4 run.
 
 ## Use
 
@@ -84,10 +90,11 @@ available in that session:
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "runtime": "minimax-mini-agent",
   "model_identifier": "exact-model-id-if-exposed",
-  "skill_loaded": true,
+  "skill_load_status": "verified",
+  "loaded_from": "path/to/evidence-deep-research/SKILL.md",
   "search": true,
   "open_url": true,
   "read_local_files": true,
@@ -100,7 +107,9 @@ Save this as JSON and run `python scripts/runtime_check.py manifest.json`. The
 result is `native`, `compatible`, or `protocol-only`; it describes execution
 conditions declared in the manifest, not detected capabilities or research
 quality. `write_local_files`, `shell`, `mcp`, and `subagents` may be omitted and
-default to `false`.
+default to `false`. Omit `skill_content_hash` when unavailable; never invent it.
+Schema-v1 boolean manifests remain readable with a migration warning, but
+`skill_loaded: true` is conservatively classified as partial until migrated.
 
 ## Portable research depth
 
@@ -160,7 +169,7 @@ library.
 ```powershell
 python -m compileall -q scripts tests
 python -m unittest discover -s tests -v
-python scripts\release_check.py --expected-version 2.7.3
+python scripts\release_check.py --expected-version 2.7.4
 python <skill-creator-dir>\scripts\quick_validate.py .
 ```
 

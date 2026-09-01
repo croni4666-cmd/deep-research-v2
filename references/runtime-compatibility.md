@@ -16,12 +16,33 @@ absence must reduce convenience, not be disguised as successful execution.
   source content. It may use the workflow as a prompt, but must label the result
   a simulation and must not call it a versioned Skill run.
 
+## Skill loading attestation
+
+Use three load states rather than a boolean:
+
+- **verified**: the session or operator confirmed that the complete `SKILL.md`
+  was read from an identified location. Record `loaded_from`; add a SHA-256
+  content hash when the runtime can compute it.
+- **partial**: only a summary, excerpt, prompt copy, or unverified Skill listing
+  was available. The workflow may be protocol-assisted, but it is not a
+  complete versioned Skill run.
+- **false**: the Skill was not loaded.
+
+Do not report `verified` merely because the Skill name/version was supplied in
+the prompt or appeared in a directory listing. A declaration is still an
+operator/runtime attestation, not remote proof.
+
 At the beginning of a consequential run, record the runtime, model identifier
-when exposed, whether the Skill was loaded, and whether source search and
+when exposed, Skill load state and provenance, and whether source search and
 opening are available. `scripts/runtime_check.py` can classify this declaration.
 It classifies values supplied by the operator or runtime; it does not detect,
 probe, or attest that a product actually loaded the Skill. Missing optional
 write, shell, MCP, and subagent fields default to `false`.
+
+New manifests should use schema version 2. Schema version 1 boolean manifests
+remain readable for migration, but `skill_loaded: true` is conservatively
+treated as partial and produces a warning because it cannot establish complete
+loading.
 
 ## Codex
 

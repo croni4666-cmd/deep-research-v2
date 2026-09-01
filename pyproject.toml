@@ -1,6 +1,6 @@
 [project]
 name = "evidence-deep-research-skill"
-version = "2.7.3"
+version = "2.7.4"
 description = "Portable agent skill for traceable, evidence-backed deep research"
 requires-python = ">=3.12"
 license = { file = "LICENSE" }

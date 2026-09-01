@@ -33,13 +33,18 @@ MiniMax product loaded them.
 An end-to-end MiniMax claim requires a retained run record showing:
 
 - the exact MiniMax product and model identifier, when exposed;
-- confirmation from the session or operator that this Skill version was loaded;
+- `skill_load_status: verified`, an identified load location, and the exact
+  version; include the Skill file hash when the runtime can compute it;
 - the search/open tools or MCP servers actually available;
 - at least one inspected source and the final cited output.
 
 `runtime_check.py` only classifies the supplied declaration. It performs no
 runtime discovery or remote attestation. Do not describe raw HTTP calls or a
 copy into a Codex Skills directory as a MiniMax integration test.
+
+Use `partial` when only a Skill summary, excerpt, prompt copy, or directory
+listing was available. Partial runs are protocol-assisted and must not be
+reported as complete v2.7.4 Skill runs.
 
 When the declaration includes `subagents: true`, the classifier may mark the
 runtime as a parallel-research candidate. This is not proof that workers inherit

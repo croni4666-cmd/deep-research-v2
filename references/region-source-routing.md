@@ -52,3 +52,26 @@ For each load-bearing regional claim, retain:
 
 When a current government URL has moved, follow `source-access.md`. Prefer the
 current official document or catalog record and retain stable identifiers.
+
+## Local-primary coverage gate
+
+Apply this gate only when the conclusion depends on current regional law,
+policy, regulation, official statistics, or market quantities.
+
+For each load-bearing jurisdiction, inspect:
+
+1. at least one local primary governing or authoritative record for the legal
+   or policy claims being made; and
+2. at least one local primary current statistical record for each quantitative
+   market or population conclusion.
+
+An agency homepage or publication index does not satisfy the gate for content
+inside a linked document. A primary record in translation may satisfy it when
+the translation is official and the original identity is retained.
+
+If a required class is unavailable, do not fill it with general knowledge or a
+secondary ranking. Mark that jurisdiction or comparison dimension unresolved,
+report the access failure, and narrow any cross-country ranking accordingly.
+Report the `secondary_substitute_ratio` defined in `source-access.md` when any
+load-bearing regional claim uses only secondary substitutes. If the ratio is
+greater than 0.5, do not label the deliverable a primary-source report.

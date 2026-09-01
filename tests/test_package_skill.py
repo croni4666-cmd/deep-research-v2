@@ -18,7 +18,7 @@ class PackageSkillTests(unittest.TestCase):
             destination = package_skill(ROOT, Path(temporary), "minimax")
             manifest = json.loads((destination / "PACKAGE.json").read_text())
             self.assertEqual(manifest["target"], "minimax")
-            self.assertEqual(manifest["version"], "2.7.3")
+            self.assertEqual(manifest["version"], "2.7.4")
             self.assertTrue((destination / "SKILL.md").is_file())
             self.assertTrue((destination / "references" / "source-access.md").is_file())
             self.assertTrue((destination / "scripts" / "runtime_check.py").is_file())
@@ -45,9 +45,10 @@ class PackageSkillTests(unittest.TestCase):
             runtime_manifest = output / "runtime.json"
             runtime_manifest.write_text(
                 json.dumps({
-                    "schema_version": 1,
+                    "schema_version": 2,
                     "runtime": "minimax-conformance-test",
-                    "skill_loaded": True,
+                    "skill_load_status": "verified",
+                    "loaded_from": "packaged/SKILL.md",
                     "search": True,
                     "open_url": True,
                     "read_local_files": True,
